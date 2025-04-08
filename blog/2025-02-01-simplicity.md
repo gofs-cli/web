@@ -2,7 +2,7 @@
 slug: simplicity
 title: Simplicity
 authors: [kavi]
-tags: [gofs, coding, simplicity]
+tags: [standards]
 ---
 
 At the heart of well written code is a principle that's often overlooked: simplicity. Simple code is easier to understand, test, debug, and maintain. This post explores the importance of code simplicity, the risks of over-engineering, and how to make better decisions around when to build in-house and when to depend on external tools.
@@ -17,7 +17,7 @@ Developers should aim to write code that is easy to read, not just for machines,
 
 I was once called out by a senior developer for writing the code below. His comment was "There were once two minds who understood what was happening in this code: God and Kavi", and honestly I couldn't tell you what this code is supposed to do:
 
-```
+```c
 for (int k = 0; k < TEAMS; k++) {
     int r = k;
     if (r == i)
