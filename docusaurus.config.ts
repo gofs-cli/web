@@ -7,7 +7,7 @@ const config: Config = {
   tagline: 'Lightweight templates for secure full-stack go apps',
   favicon: 'img/favicon.ico',
 
-  url: 'https://gofs-cli.github.io',
+  url: 'https://gofs-cli.github.io/web',
   baseUrl: '/',
 
   organizationName: 'gofs-cli', 
