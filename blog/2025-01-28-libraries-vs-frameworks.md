@@ -2,7 +2,7 @@
 slug: libraries-vs-frameworks
 title: Libraries vs. Frameworks
 authors: [kavi]
-tags: [gofs, library, framework]
+tags: [standards, architecture]
 ---
 
 Software libraries provide experienced developers with the flexibility to choose components that best align with their architectural vision and specific use cases. This modular approach empowers teams to build tailored solutions, often encouraging greater creativity and craftsmanship. When used effectively, libraries can foster cleaner, more maintainable code and lead to development environments where engineers are more engaged and productive.

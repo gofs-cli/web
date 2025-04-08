@@ -2,7 +2,7 @@
 slug: evergreen-go
 title: Evergreen Go
 authors: [kavi]
-tags: [gofs, evergreen, go]
+tags: [gofs, go]
 ---
 
 Large organizations have hundreds or even thousands of custom systems. Many of these systems were built decades ago and codify the business as it was decades ago. Often these systems have been underinvested in for years and have become an obstacle for the organization to change.

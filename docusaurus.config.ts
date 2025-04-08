@@ -46,10 +46,16 @@ const config: Config = {
   ],
 
   themeConfig: {
+    colorMode: {
+      defaultMode: 'dark',
+      disableSwitch: false,
+      respectPrefersColorScheme: false,
+    },
     navbar: {
       logo: {
         alt: 'Gofs',
         src: 'img/gofs.svg',
+        srcDark: 'img/gofs-dark.svg',
       },
       items: [
         {

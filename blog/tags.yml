@@ -1,19 +1,19 @@
-facebook:
-  label: Facebook
-  permalink: /facebook
-  description: Facebook tag description
+gofs:
+  label: Gofs
+  permalink: /gofs
+  description: Gofs website
 
-hello:
-  label: Hello
-  permalink: /hello
-  description: Hello tag description
+go:
+  label: Go
+  permalink: /go
+  description: Go website
 
-docusaurus:
-  label: Docusaurus
-  permalink: /docusaurus
-  description: Docusaurus tag description
+standards:
+  label: Standards
+  permalink: /standards
+  description: Coding standards
 
-hola:
-  label: Hola
-  permalink: /hola
-  description: Hola tag description
+architecture:
+  label: Architecture
+  permalink: /architecture
+  description: Architecture
