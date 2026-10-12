@@ -7,7 +7,7 @@ tags: [gofs, go]
 
 Large organizations have hundreds or even thousands of custom systems. Many of these systems were built decades ago and codify the business as it was decades ago. Often these systems have been underinvested in for years and have become an obstacle for the organization to change.
 
-<!-- truncate -->
+{/* truncate */}
 
 ![evergreen](./img/evergreen.jpg)
 
@@ -31,5 +31,8 @@ Go (designed by the creators of C) was designed to be a modern business programm
 language, and the Go team have made a commitment to backward compatibility. Go has
 gained wide adoption, and the tooling ecosystem is rich and meets the expectations of a modern developer. This is why Go is the only real option for building modern evergreen apps.
 
-Using Go for frontend and backend brings go's backward compatibility commitment to the
-entire app. This means an app that is written today will compile in the future with no changes. Go evergreen apps should be carefully crafted to minimize direct dependencies, which means these apps have minimal supply chain issues such as obsolescence, patching, or supply chain vulnerabilities. The few dependences used in gofs apps have been stable for many years and have no transitive dependencies.
+Using Go for the whole server, with nothing but the standard library, brings go's backward compatibility commitment to the entire backend. This means an app that is written today will compile in the future with no changes. Go evergreen apps should be carefully crafted to minimize direct dependencies, which means these apps have minimal supply chain issues such as obsolescence, patching, or supply chain vulnerabilities. The few dependencies used in gofs apps have been stable for many years and have no transitive dependencies.
+
+## Evergreen Web
+
+The browser is the other half of the app, and it has a compatibility commitment of its own: browsers do not break the web. HTML written in 1995 still renders. The way to inherit that commitment is to build on what the browser provides—HTML, CSS, custom elements, `fetch`, `<dialog>`—rather than on a framework that sits between you and the browser and has its own upgrade cycle. Gofs apps render pages on the server and add small, standards-based web components where interaction is needed. The one small library they use for this is vendored into the app, pinned, and written close enough to the standard that it could be removed.

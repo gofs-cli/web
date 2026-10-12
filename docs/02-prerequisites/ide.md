@@ -13,9 +13,13 @@ gofs lsp
 
 ## VSCode extension
 
-A [VSCode extension](https://marketplace.visualstudio.com/items?itemName=gofs-cli.gofs-vscode) is available for gofs.
+A [VSCode extension](https://marketplace.visualstudio.com/items?itemName=gofs-cli.gofs-vscode) is available for gofs. It lets you navigate from a route literal such as `"/list"` in a Go handler, an HTML template or a component's JavaScript to the matching entry in `routes.go`.
 
 Search for _gofs_ in VSCode extensions and install it.
+
+:::tip
+To type-check component JavaScript without a build step, add `// @ts-check` at the top of the file. VSCode's built-in TypeScript support will then check the file against the Lit type definitions that gofs vendors alongside the library.
+:::
 
 ## Neovim
 

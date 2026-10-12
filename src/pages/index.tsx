@@ -35,7 +35,7 @@ function HomePage(): ReactNode {
             paddingBottom: "3rem",
           }}
         >
-          Lightweight templates for secure full-stack go apps.
+          Lightweight templates for evergreen full-stack Go apps.
         </p>
       </section>
       <section>
@@ -51,43 +51,6 @@ function HomePage(): ReactNode {
           Better developer experience means happier developers, faster time to
           ship, and less bugs.
         </p>
-      </section>
-      <section>
-        <p>
-          Gofs apps are built on on top of these popular alternatives to
-          heavyweight legacy frameworks. They have no dependencies of their own
-          and are being developed with a philosophy of stability and backward
-          compatibility similar to ours.
-        </p>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            marginTop: "60px",
-          }}
-        >
-          <a href="https://alpinejs.dev">
-            <img height={80} src="./img/alpinejs.svg" aria-label="alpinejs" />
-          </a>
-          <a
-            style={{
-              marginBottom: "90px",
-              fontSize: "5rem",
-              height: "80px",
-            }}
-            href="https://htmx.org"
-          >
-            <span>
-              &lt;<b style={{ color: "blue" }}>/</b>&gt; htm
-              <b style={{ color: "blue" }}>x</b>
-            </span>
-          </a>
-          <a href="https://templ.guide">
-            <img height={60} src="./img/templ.svg" aria-label="templ" />
-          </a>
-        </div>
       </section>
     </main>
   );

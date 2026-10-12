@@ -6,15 +6,15 @@ sidebar_position: 1
 
 ## The internal/ui folder
 
-Frontend pages are located in the `/internal/ui/pages` folder. Pages are written in [templ](https://templ.guide).
+Frontend pages are located in the `/internal/ui/pages` folder. Pages are Go [html/template](https://pkg.go.dev/html/template) files.
 
 ```
 root
 |--internal
 |  |--ui
-|     |--components     // shared components
+|     |--components     // web components (islands)
 |     |--pages          // frontend pages
-|     |--index.templ    // the app's main template page
+|     |--layout.html    // the app's page layout
 ```
 
 :::tip
@@ -22,7 +22,7 @@ The pages folder structure should mirror the structure of your website.
 :::
 
 :::tip
-Keep handlers in the same folder as their and pages (close together).
+Keep handlers in the same folder as their pages (close together).
 :::
 
 ## Example
@@ -41,102 +41,87 @@ mytodo
 |        |--lists
 ```
 
-Create a `/internal/ui/pages/lists/index.templ` file. The page will take a slice of todo lists and render them. The page also contains a component _List_ that takes a single list and renders that list.
+Create a `/internal/ui/pages/lists/index.html` file. The page takes a slice of todo lists and renders them.
 
-```templ
-package lists
-
-import l "github.com/myorg/mytodo/internal/app/list"
-
-templ IndexPage(lists []l.List) {
-	<main class="flex w-full flex-col">
-		for _, list := range lists {
-			<h2 class="text-2xl font-extrabold">{ list.Name }</h2>
-			<div class="flex flex-col gap-y-2">
-				@List(list)
-			</div>
-		}
-	</main>
-}
-
-templ List(list l.List) {
-	<ul>
-		for _, item := range list.Items {
-			<li>{ item }</li>
-		}
-	</ul>
-}
+```html
+{{ define "content" }}
+<main>
+  {{ range .Lists }}
+  <h2>{{ .Name }}</h2>
+  <ul>
+    {{ range .Items }}<li>{{ . }}</li>{{ end }}
+  </ul>
+  {{ end }}
+</main>
+{{ end }}
 ```
+
+This is a complete, working page. The server renders it, the browser displays it, and no JavaScript is involved.
+
+### Adding a form
+
+Lets add a form to create a new todo list. A plain HTML form posts to the `"/list"` end point; the handler creates the list and redirects back to this page. This needs no JavaScript either.
+
+```html
+{{ define "content" }}
+<main>
+  {{ range .Lists }}
+  <h2>{{ .Name }}</h2>
+  <ul>
+    {{ range .Items }}<li>{{ . }}</li>{{ end }}
+  </ul>
+  {{ end }}
+  <form method="post" action="/list">
+    <input name="todo-list-name" required />
+    <button>Add List</button>
+  </form>
+</main>
+{{ end }}
+```
+
+:::tip
+If you are using the Gofs VSCode extension, you can hover over `"/list"` and navigate to the `routes.go` entry or the handler.
+:::
 
 ### Adding interactivity
 
-Lets include a form and buttons to add todo lists and items.
+Adding an item to a list should not reload the whole page. This is a job for an _island_: a web component that the server renders the initial HTML for, and that takes over once its JavaScript loads.
 
-For the index page lets add an input field and button to capture the name of a new todo list and it post to the `"/list"` end point.
+Wrap each list in a `<todo-list>` element. Inside it, render the items and a plain form that posts to `"/list/{id}"`. Before the component loads, the form works as a normal form; after it loads, the component submits in the background and updates the list in place.
 
-```templ
-templ IndexPage(lists []l.List) {
-	<main class="flex w-full flex-col">
-		for _, list := range lists {
-			<h2 class="text-2xl font-extrabold">{ list.Name }</h2>
-			<div class="flex flex-col gap-y-2">
-				@List(list)
-			</div>
-		}
-		<input id="todo-list-name" name="todo-list-name"/>
-		<button
-			type="submit"
-			hx-post="/list"
-			hx-include="#todo-list-name"
-			hx-target="main"
-		>
-			Add List
-		</button>
-	</main>
-}
+```html
+{{ define "content" }}
+<main>
+  {{ range .Lists }}
+  <h2>{{ .Name }}</h2>
+  <todo-list list-id="{{ .ID }}">
+    <ul>
+      {{ range .Items }}<li>{{ . }}</li>{{ end }}
+    </ul>
+    <form method="post" action="/list/{{ .ID }}">
+      <input name="todo-list-item" required />
+      <button>Add Item</button>
+    </form>
+  </todo-list>
+  {{ end }}
+  <form method="post" action="/list">
+    <input name="todo-list-name" required />
+    <button>Add List</button>
+  </form>
+</main>
+{{ end }}
 ```
 
 :::info
-The `hx-post="/list"` attribute uses htmx to make a POST request to the `"/list"` end point and include the `todo-list-name` input element.
-
-The `hx-target="main"` will cause the response from this endpoint will replace the contents of the `main` element.
-:::
-
-:::tip
-If you are using the Gofs VSCode extension, you can hover over `"/link"` and navigate to the `routes.go` entry or the handler.
-:::
-
-Lets wrap the _List_ component in a form that posts to the `"/list/{id}"` end point. Add an input field to capture the list item to add, a hidden field with the _list.ID_, and a submit button.
-
-```templ
-templ List(list l.List) {
-	<form hx-post={ "/list/" + list.ID } hx-swap="outerHTML">
-		<ul>
-			for _, item := range list.Items {
-				<li>{ item }</li>
-			}
-		</ul>
-		<input name="todo-list-item"/>
-		<input type="hidden" name="list-id" value={ list.ID }/>
-		<button type="submit">
-			Add Item
-		</button>
-	</form>
-}
-```
-
-:::info
-The `hx-post={ "/list/" + list.ID }` attribute uses htmx to make a POST request to the `"/list/{id}"` end point.
-
-The response from this endpoint will swap the `form` element in its entirety.
+The layout's loader script sees the `<todo-list>` tag on the page and imports `/components/todo-list/element.js`. The component is written in the [Components](./components/element) section.
 :::
 
 :::warning
 When forming links, use one of the following methods:
 
-- literals such as `"/link"`
-- literals with operations such as `{ "/link/" + id }`
-- format statement such as `{ fmt.Sprintf("/link/%s", id) }`
+- literals such as `"/list"`
+- template actions such as `"/list/{{ .ID }}"`
+- in JavaScript, template literals such as `` `/list/${this.listId}` ``
 
 Mixing these methods is less readable and will generate a warning if you are using the Gofs VSCode extension.
 :::

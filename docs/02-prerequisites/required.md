@@ -6,6 +6,8 @@ sidebar_position: 1
 
 You should have some experience with Go. There are some good tutorials [here](https://go.dev/doc/tutorial/getting-started) and [here](https://tour.golang.org/welcome/1) which you can use to get started if you are new to Go. These docs assume you are familiar with Go.
 
+You should also be comfortable with HTML, CSS and SQL. Gofs apps use these directly rather than through a framework. Some JavaScript is needed for interactive components; the [frontend docs](../frontend/page) introduce everything you need.
+
 ## Go
 
 [Download go](https://go.dev/dl/) for your OS and install it. The official instructions are [here](https://go.dev/doc/install).
@@ -60,3 +62,7 @@ sudo apt-get install make
 On Windows you will need to install a make tool such as
 [GNU Make](https://www.gnu.org/software/make/)
 :::
+
+## Not required
+
+You do not need Node.js, npm, or a JavaScript bundler. Gofs apps vendor the small browser libraries they use and serve them from the Go binary.

@@ -9,28 +9,35 @@ Go is not opinionated about folder structure however go convention (and good pra
 ```
 root
 |--.github              Github actions configuration
-|--.gofs                Gofs configuration
+|--.gofs                Gofs configuration and vendor manifest
 |--.vscode              Vscode configuration
 |--cmd                  Command folder
 |--docker               Docker compose folder
 |--internal
 |  |--app               Backend (see backend docs)
+|  |  |--[package]
+|  |     |--queries.sql Package SQL queries (see sqlc)
+|  |     |--query       sqlc generated code (do not edit)
 |  |--auth              Authentication functions
 |  |--config            App config
 |  |--data              Test data generation functions
 |  |--db                Database functions and migrations
 |  |--server
-|  |  |--assets         Static assets
+|  |  |--assets         Static assets (app.css, vendored libraries)
 |  |  |--handlers       Generic handlers, for example assets
 |  |  |--middleware.go  Server middleware
 |  |  |--routes.go      Server routes
 |  |  |--server.go      Server code
 |  |--ui                Frontend (see frontend docs)
+|     |--components     Web components, one folder per element
+|     |--pages          Page templates and their handlers
+|     |--layout.html    The app's page layout
 |--scripts              Build Scripts
+|--sqlc.yaml            sqlc configuration
 ```
 
 :::info
-Gofs is not a framework so you can use or modify this as you see fit. If you are using the _gofs vscode plugin_ you need to preserve the location and name of the `routes.go` file.
+Gofs is not a framework so you can use or modify this as you see fit. If you are using the _gofs vscode plugin_ you need to preserve the location and name of the `routes.go` file. The component loader expects each element at `internal/ui/components/<tag-name>/element.js`.
 :::
 
 Gofs apps are not intended to expose library functions and hence all implementation

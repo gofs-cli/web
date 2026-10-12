@@ -52,6 +52,8 @@ go tool gofs init github.com/myorg/myapp
 
 :::
 
+The generated project is a complete, runnable app. It contains a Go server, a page layout, a vendored copy of Lit, an example component, and a `sqlc.yaml` ready for your first package. There is no `package.json` and nothing to `npm install`.
+
 ## 3. Run the project
 
 :::info
@@ -63,3 +65,5 @@ From your project directory run
 ```bash
 make
 ```
+
+Other useful targets are `make dbup` to start a local Postgres, and `make generate` to run `go generate` (which runs sqlc for any package that has queries).

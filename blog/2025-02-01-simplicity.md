@@ -7,7 +7,7 @@ tags: [standards]
 
 At the heart of well written code is a principle that's often overlooked: simplicity. Simple code is easier to understand, test, debug, and maintain. This post explores the importance of code simplicity, the risks of over-engineering, and how to make better decisions around when to build in-house and when to depend on external tools.
 
-<!-- truncate -->
+{/* truncate */}
 
 ![simplicity](./img/simplicity.jpg)
 

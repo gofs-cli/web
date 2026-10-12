@@ -8,14 +8,13 @@ sidebar_position: 4
 
 Keep routing for the app in `/internal/server/routes.go`. This makes it easy to manage all routing from one place.
 
-The Gofs default template ships with routing and handlers for static assets in the _Routes_ method, shown below.
+The Gofs default template ships with routing and handlers for static assets and components in the _Routes_ method, shown below.
 
 ```go
 func (s *Server) Routes() {
-	// filserver route for assets
-	assetMux := http.NewServeMux()
-	assetMux.Handle("GET /{path...}", http.StripPrefix("/assets/", handlers.NewHashedAssets(assets.FS)))
-	s.r.Handle("GET /assets/{path...}", s.assetsMiddlewares(assetMux))
+	// fileserver routes for assets and components
+	s.r.Handle("GET /assets/{path...}", s.assetsMiddlewares(handlers.NewHashedAssets(assets.FS)))
+	s.r.Handle("GET /components/{path...}", s.assetsMiddlewares(handlers.NewComponents(ui.Components)))
 	...
 	// you can start adding your routes here
 }
@@ -23,7 +22,7 @@ func (s *Server) Routes() {
 
 ## Uniformity
 
-Routes should follow the structure of pages.
+Routes should follow the structure of pages. Routes that are called by components (and return JSON) sit next to the page routes they serve, so that the whole of a section's traffic can be read in one place.
 
 ```go
 func (s *Server) Routes() {
@@ -34,7 +33,7 @@ func (s *Server) Routes() {
 	routesMux.Handle("GET /mysection1/mypage2", page.MySection1MyPage2())
 	routesMux.Handle("GET /mysection2/mypage1", page.MySection2MyPage1())
 
-	s.r.Handle("/", s.routeMiddlewares(routesMux()))
+	s.r.Handle("/", s.routeMiddlewares(routesMux))
 	...
 }
 ```
@@ -51,15 +50,15 @@ import (
 
 	"github.com/myorg/mytodo/internal/server/assets"
 	"github.com/myorg/mytodo/internal/server/handlers"
+	"github.com/myorg/mytodo/internal/ui"
 	"github.com/myorg/mytodo/internal/ui/pages/lists"
 	"github.com/myorg/mytodo/internal/ui/pages/notfound"
 )
 
 func (s *Server) Routes() {
-	// filserver route for assets
-	assetMux := http.NewServeMux()
-	assetMux.Handle("GET /{path...}", http.StripPrefix("/assets/", handlers.NewHashedAssets(assets.FS)))
-	s.r.Handle("GET /assets/{path...}", s.assetsMiddlewares(assetMux))
+	// fileserver routes for assets and components
+	s.r.Handle("GET /assets/{path...}", s.assetsMiddlewares(handlers.NewHashedAssets(assets.FS)))
+	s.r.Handle("GET /components/{path...}", s.assetsMiddlewares(handlers.NewComponents(ui.Components)))
 
 	// handlers for normal routes with all general middleware
 	routesMux := http.NewServeMux()
@@ -83,4 +82,8 @@ This route
 
 will render the lists index at the root page /.
 
+:::
+
+:::tip
+There is no client-side router in a gofs app. Navigating between pages is a normal link, and the server renders the next page. This keeps every page independent and keeps the browser's back button, bookmarks and the address bar working without any code.
 :::

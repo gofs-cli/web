@@ -1,20 +1,29 @@
-import {themes as prismThemes} from 'prism-react-renderer';
-import type {Config} from '@docusaurus/types';
+import { themes as prismThemes } from 'prism-react-renderer';
+import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'Gofs',
-  tagline: 'Lightweight templates for secure full-stack go apps',
+  tagline: 'Lightweight templates for evergreen full-stack Go apps',
   favicon: 'img/favicon.ico',
+
+  future: {
+    v4: true,
+  },
 
   url: 'https://gofs.dev',
   baseUrl: '/',
 
-  organizationName: 'gofs-cli', 
-  projectName: 'website', 
+  organizationName: 'gofs-cli',
+  projectName: 'website',
 
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
+  },
 
   i18n: {
     defaultLocale: 'en',
@@ -64,9 +73,9 @@ const config: Config = {
           position: 'left',
           label: 'Docs',
         },
-        {to: '/blog', label: 'Blogs', position: 'left'},
+        { to: '/blog', label: 'Blogs', position: 'left' },
         {
-          href: 'https://github.com/gofs-cli/gofs',
+          href: 'https://github.com/gofs-cli',
           label: 'GitHub',
           position: 'right',
         },

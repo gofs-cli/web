@@ -23,7 +23,7 @@ Each package should have its own folder which should contain an exposed API and 
 
 Lets create a simple todo list app called _mytodo_ which will keep track of todo lists. Todo list must have no more than 20 items.
 
-Start by initializing a new project _githib.com/myorg/mytodo_.
+Start by initializing a new project _github.com/myorg/mytodo_.
 
 Now lets create a folder for our package called _list_ that will contain all the business logic for a todo list.
 
@@ -103,7 +103,7 @@ Now lists can be accessed from frontend handlers by passing them as a parameter 
 ```go
 func (s *Server) Routes() {
     ...
-    http.Handle("/lists", page.All(s.lm))
+    s.r.Handle("GET /lists", lists.Index(s.lm))
     ...
 }
 ```
