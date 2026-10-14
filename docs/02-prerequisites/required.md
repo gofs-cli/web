@@ -2,40 +2,46 @@
 sidebar_position: 1
 ---
 
-# Required
+# Required Tools
 
-You should have some experience with Go. There are some good tutorials [here](https://go.dev/doc/tutorial/getting-started) and [here](https://tour.golang.org/welcome/1) which you can use to get started if you are new to Go. These docs assume you are familiar with Go.
+To build applications with gofs, you need only standard tools. Gofs avoids the complex dependencies and build chains common in modern full-stack development.
 
-You should also be comfortable with HTML, CSS and SQL. Gofs apps use these directly rather than through a framework. Some JavaScript is needed for interactive components; the [frontend docs](../frontend/page) introduce everything you need.
+These docs assume you have basic familiarity with Go. If you are new to Go, the official [Getting Started Tutorial](https://go.dev/doc/tutorial/getting-started) and the [Tour of Go](https://tour.golang.org/welcome/1) provide great starting points.
 
-## Go
+You should also be comfortable with standard HTML, modern CSS, and plain SQL. Gofs applications use these directly rather than through intermediary framework abstractions.
 
-[Download go](https://go.dev/dl/) for your OS and install it. The official instructions are [here](https://go.dev/doc/install).
+---
 
-Ensure that _go_ is in your path. You should be able to type the command below in _terminal_ or _cmd_ and see the installed go version.
+## 1. Go (1.24+)
+
+[Download and install Go](https://go.dev/dl/) following the [official installation instructions](https://go.dev/doc/install).
+
+Verify your Go installation by running:
 
 ```bash
 go version
 ```
 
-Once go is installed, you can add the GOPATH to your system path. This is typically your `$HOME/go/bin`. This should also be added to your system PATH to allow you to run installed tools.
+Ensure that `$GOPATH/bin` (typically `$HOME/go/bin` on macOS/Linux or `%USERPROFILE%\go\bin` on Windows) is included in your system `PATH` so you can execute installed command-line tools.
 
-## Make
+---
 
-The Gofs template includes a Makefile for convenience. To check if you have make installed, run
+## 2. Make
+
+Gofs templates include a standard `Makefile` for developer workflow convenience (`make`, `make dbup`, `make generate`).
+
+Verify whether Make is installed:
 
 ```bash
 make --version
 ```
 
-If you dont see a make version printed then you will need to install it with the instructions for your OS below.
+If Make is not installed, follow the instructions for your operating system:
 
 :::info
 
-### MacOS
-
-For MacOS, make comes with Xcode command line tools. Run this command in a terminal
-to install it
+### macOS
+Make is included with Xcode Command Line Tools. Install it by running:
 
 ```bash
 xcode-select --install
@@ -45,12 +51,12 @@ xcode-select --install
 
 :::info
 
-### Linux
-
-For Linux, you can install it with the command below or equivalent for your distro
+### Linux (Debian / Ubuntu / Fedora)
+Install Make using your distribution's package manager:
 
 ```bash
-sudo apt-get install make
+sudo apt-get install make   # Debian/Ubuntu
+sudo dnf install make       # Fedora
 ```
 
 :::
@@ -58,11 +64,25 @@ sudo apt-get install make
 :::info
 
 ### Windows
+On Windows, you can install Make via [GNU Make](https://www.gnu.org/software/make/) or through package managers like Chocolatey (`choco install make`) or Scoop (`scoop install make`).
 
-On Windows you will need to install a make tool such as
-[GNU Make](https://www.gnu.org/software/make/)
 :::
 
-## Not required
+---
 
-You do not need Node.js, npm, or a JavaScript bundler. Gofs apps vendor the small browser libraries they use and serve them from the Go binary.
+## What is NOT Required: The Zero-npm Guarantee
+
+You do **not** need:
+- **Node.js**
+- **npm / pnpm / yarn**
+- **Webpack / Vite / esbuild / Turbopack**
+- **Babel / SWC**
+
+### Why Gofs Excludes Node.js and npm
+Excluding the JavaScript build ecosystem is an intentional architectural decision to protect your application from the primary sources of modern software fragility:
+
+1. **Immunity from Supply Chain Attacks**: Modern npm dependency trees often pull in thousands of transitive packages from unvetted authors, exposing projects to typosquatting, token theft, and malicious postinstall hooks. With gofs, there is no `package.json` and zero unvetted runtime scripts.
+2. **Freedom from Dependency Hell**: You never have to resolve peer-dependency conflicts, handle incompatible bundler plugins, or suffer broken builds when an npm package updates.
+3. **True Backward Compatibility**: By relying on the Go standard library on the backend and native W3C web standards (Web Components, Declarative Shadow DOM, modern CSS Baseline) in the browser, your application remains evergreen and functional for years to come.
+
+The small browser libraries gofs uses (Lit and its Task controller) are vendored as static, checksummed files directly in `/internal/server/assets/vendor/` and served from the embedded Go binary.

@@ -2,26 +2,56 @@
 sidebar_position: 2
 ---
 
-# Indirection
+# Minimizing Indirection
 
-Keep indirection in pages to a minimum. For example, the code below captures the formatting of a header with a class. It is much easier to read and maintain than the same code with indirection (a heading component) shown below it.
+In web development, unnecessary indirection is one of the most common sources of code bloat, slow rendering, and maintenance headaches. 
+
+In a gofs application, we keep indirection to a strict minimum: **prefer direct, readable HTML and CSS over layers of wrapper abstractions.**
+
+---
+
+## The Wrapper Anti-Pattern
+
+Consider how a simple section heading is formatted. In traditional component-heavy frameworks, developers often wrap every standard element in a custom component:
 
 ```html
-<h2 class="section-heading">New section</h2>
-```
-
-```html
+<!-- Anti-pattern: Unnecessary component wrapper -->
 <app-heading text="New section" size="2xl" weight="extrabold"></app-heading>
 ```
 
-`<app-heading>` renders the same heading but it is not clear how it is implemented unless you inspect it, and it loads JavaScript to render what one line of HTML can render on its own. `<app-heading>` is a risk of bloating as it caters for more and more different types of headings.
+Contrast this with direct, semantic HTML:
 
-The same applies to Go templates: a `{{ template "heading" . }}` that takes a map of options hides what a line of HTML would show.
+```html
+<!-- Gofs standard: Direct, semantic HTML -->
+<h2 class="section-heading">New section</h2>
+```
 
-:::tip
-This means that sometimes it is better to repeat code than abstract it away, as in the example above (header formatting would be repeated). There are many tools that will help you manage repeated code. The goal is to make the code as easy to read and maintain as possible.
-:::
+### Why the Direct Approach Wins:
+1. **Zero JavaScript Overhead**: The direct `<h2>` tag renders natively in microseconds with zero JavaScript parsing or execution. `<app-heading>` loads a script just to render what one line of HTML does natively.
+2. **Transparency**: Anyone reading the template immediately knows it is an `<h2>` heading with a standard CSS class. With `<app-heading>`, developers must inspect the component's internal source code to understand what HTML tag it generates and how accessibility attributes are handled.
+3. **Immunity to Scope Creep**: Wrapper components inevitably accumulate props (`size`, `weight`, `color`, `iconLeft`, `truncate`, `responsiveBreakpoint`) until they become monolithic, bloated micro-frameworks prone to breaking changes.
 
-:::tip
-A web component earns its place when it has behaviour: it fetches, submits, opens, closes or reacts to input. A component that only arranges static HTML is indirection.
-:::
+The same principle applies to Go server templates: avoiding `{{ template "heading" (dict "text" "Hello" "level" 2) }}` when a standard `<h2>Hello</h2>` is simpler and more readable.
+
+---
+
+## Why AI Changes the Abstraction Tradeoff
+
+Historically, developers justified creating wrapper components and template macros because hand-typing repetitive HTML attributes and CSS classes felt tedious and prone to typos.
+
+**Modern AI coding assistants have eliminated this justification:**
+- AI tools can generate, update, and refactor semantic HTML elements and CSS classes across an entire project in seconds.
+- AI excels at reading transparent, flat HTML/CSS structures far better than navigating deeply nested, proprietary component wrapper hierarchies.
+- You no longer need to sacrifice readability or introduce runtime abstractions just to save keystrokes.
+
+---
+
+## When Does a Web Component Earn Its Place?
+
+A Web Component earns its place in a gofs project when it introduces **behavior**, not mere decoration:
+- It fetches or submits data asynchronously in the background.
+- It intercepts form submissions to provide optimistic updates.
+- It manages interactive UI state (e.g. accordion toggles, dropdowns, drag-and-drop).
+- It provides strict style encapsulation via Declarative Shadow DOM for a complex embedded widget.
+
+If a component only arranges static HTML and applies a CSS class, **it should not be a component**. Keep it as plain HTML and CSS.

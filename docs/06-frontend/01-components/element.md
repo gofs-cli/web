@@ -4,9 +4,9 @@ sidebar_position: 2
 
 # Writing a Component
 
-## Folders
+## Folder Organization
 
-Each component lives in its own folder under `/internal/ui/components`, named after its tag. The folder contains `element.js` and, if the component needs styles of its own, `element.css`.
+Every custom component lives in its own dedicated folder under `/internal/ui/components`, named to match the custom element's tag name.
 
 ```
 root
@@ -15,14 +15,18 @@ root
 |     |--components
 |        |--todo-list
 |           |--element.js
-|           |--element.css
+|           |--element.css      // Optional, only needed for shadow DOM components
 ```
 
-The layout's loader script imports `/components/<tag>/element.js` for every custom element it finds on the page, so a component needs no registration beyond this folder.
+The layout's island loader automatically imports `/components/<tag-name>/element.js` for any custom element detected on the page. You do not need to register components in a central JavaScript registry.
 
-## Example
+---
 
-Lets write the `<todo-list>` island from the [page](../page) example. The server renders the list items and a plain form inside the element. The component reads the items from that HTML when it connects, and takes over the form so that adding an item updates the list in place instead of reloading the page.
+## Pattern 1: Light DOM Island (Recommended for Most In-Page Features)
+
+Let's examine the `<todo-list>` island from our application example. 
+
+The Go server renders the existing items and a standard `<form>` directly inside the element. When the component's JavaScript connects, it reads the server-rendered items from the DOM and intercepts form submissions to update the UI dynamically without reloading the page.
 
 Create `/internal/ui/components/todo-list/element.js`:
 
@@ -37,18 +41,18 @@ export class TodoList extends LitElement {
     items: { state: true },
   };
 
-  // Render into the page, not a shadow root, so app.css applies.
+  // Render into the Light DOM so global app.css styles apply directly
   createRenderRoot() {
     return this;
   }
 
   connectedCallback() {
-    // Read the initial state from the server-rendered HTML.
-    this.items = [...this.querySelectorAll("li")].map((li) => li.textContent);
+    // Read the server-rendered initial HTML before the first Lit render
+    this.items = [...this.querySelectorAll("li")].map((li) => li.textContent ?? "");
     super.connectedCallback();
   }
 
-  // Submits a new item. Runs only when asked (autoRun: false).
+  // Handle data submission with Task
   _add = new Task(this, {
     autoRun: false,
     task: async ([item], { signal }) => {
@@ -87,44 +91,137 @@ export class TodoList extends LitElement {
 customElements.define("todo-list", TodoList);
 ```
 
-Walking through it:
+### Key Elements of the Light DOM Island:
+1. **`createRenderRoot() { return this; }`**: Renders into the light DOM, allowing classes from `/internal/server/assets/app.css` to style the component effortlessly.
+2. **`connectedCallback()`**: Hydrates initial state from the server-rendered HTML. Because the server already rendered the list, the user experiences zero visual jump or content layout shift.
+3. **`_add = new Task(...)`**: The Task controller from `@lit/task` manages loading, success, and error states cleanly without external state management libraries.
+4. **Progressive Fallback**: Notice that the form specifies a valid `method="post"` and `action`. If the user submits before the JavaScript finishes downloading, the browser simply falls back to a standard form submission.
 
-- `static properties` declares the reactive properties. `listId` is read from the `list-id` attribute the server set; `items` is internal state. Changing either re-renders the component.
-- `createRenderRoot` returns the element itself, so the component renders into the page (see [light DOM](./best-practice#light-dom-by-default)).
-- `connectedCallback` runs when the element is added to the page, before Lit's first render. It reads the items the server already rendered, so the first render shows the same thing and nothing flashes.
-- `_add` is a [Task](./data): the component's one request, with its pending, complete and error states managed for us.
-- `render` returns the same markup the server rendered. The `action` attribute is kept so the form still works as a form; `@submit` takes over when JavaScript is present. The button is disabled while the request is pending, and an error from the handler is shown beneath the form.
+---
 
-:::tip
-`// @ts-check` at the top of the file turns on type checking in VSCode with no build step.
-:::
+## Pattern 2: Declarative Shadow DOM (DSD) Island
 
-:::info
-Note what the component does not do. It does not check that the list has fewer than 20 items; the backend does, and the handler returns the error. It does not know about other lists or the "Add List" form. It does not import anything but Lit.
-:::
+When an island requires **strict style encapsulation** or uses native `<slot>` elements to project user content into a private template, use Declarative Shadow DOM.
 
-## Styles
+### 1. The Server Template (`/internal/ui/pages/users/index.html`)
 
-Put styles for a component in the app stylesheet, scoped to its tag:
+The Go template emits the shadow root directly using `<template shadowrootmode="open">`:
 
-```css
-todo-list {
-  display: block;
+```html
+<user-profile user-id="{{ .User.ID }}">
+  <template shadowrootmode="open">
+    <style>
+      :host {
+        display: block;
+        padding: 1.5rem;
+        background: var(--color-surface, #fff);
+        border-radius: var(--radius, 8px);
+        box-shadow: var(--shadow-sm);
+      }
+      .badge {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--color-primary);
+      }
+      h3 { margin: 0.5rem 0; }
+    </style>
+    <div class="profile-card">
+      <span class="badge">{{ .User.Role }}</span>
+      <h3>{{ .User.Name }}</h3>
+      <slot></slot>
+    </div>
+  </template>
 
-  .error {
-    color: var(--color-danger);
-  }
-}
+  <!-- Light DOM content projected into <slot> -->
+  <p class="user-bio">{{ .User.Bio }}</p>
+</user-profile>
 ```
 
-Only when a component renders into a shadow root does it need its own `element.css`.
+### 2. The Lit Component (`/internal/ui/components/user-profile/element.js`)
 
-## Events
-
-When a component needs to tell the page something, dispatch an event:
+In Lit, the default `createRenderRoot()` behavior creates or attaches to a shadow root. When Declarative Shadow DOM is emitted by the server, Lit **automatically adopts the existing server-rendered shadow root**:
 
 ```js
-this.dispatchEvent(new CustomEvent("item-added", { bubbles: true, detail: { listId: this.listId } }));
+// @ts-check
+import { LitElement, html, css } from "lit";
+
+export class UserProfile extends LitElement {
+  static properties = {
+    userId: { attribute: "user-id" },
+    expanded: { state: true },
+  };
+
+  static styles = css`
+    :host {
+      display: block;
+      padding: 1.5rem;
+      background: var(--color-surface, #fff);
+      border-radius: var(--radius, 8px);
+      box-shadow: var(--shadow-sm);
+    }
+    .badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--color-primary);
+    }
+    h3 { margin: 0.5rem 0; }
+    button { margin-top: 1rem; cursor: pointer; }
+  `;
+
+  render() {
+    return html`
+      <div class="profile-card">
+        <slot></slot>
+        <button @click=${() => this.expanded = !this.expanded}>
+          ${this.expanded ? "Show Less" : "Show More"}
+        </button>
+        ${this.expanded ? html`<p class="extra-info">Active user since 2024</p>` : ""}
+      </div>
+    `;
+  }
+}
+
+customElements.define("user-profile", UserProfile);
 ```
 
-The page, or another island, can listen for it with `addEventListener`. This keeps islands independent of each other.
+### Why Declarative Shadow DOM Wins:
+- **No Client Hydration Delay**: Browsers render the encapsulated shadow tree instantly during HTML parsing, with no Flash of Unstyled Content (FOUC).
+- **Style Isolation**: Styles defined inside the shadow root cannot leak into other parts of the page, making complex interactive widgets completely safe from unintended side effects.
+- **Native Standard**: Supported natively across all modern browser engines without JavaScript polyfills.
+
+---
+
+## Communicating Between Islands: DOM Events
+
+When two islands on a page need to communicate (e.g. adding a todo item updates a summary counter elsewhere on the page), **dispatch standard DOM events** instead of introducing a global state manager:
+
+```js
+// Inside <todo-list>:
+this.dispatchEvent(
+  new CustomEvent("item-added", {
+    bubbles: true,
+    composed: true, // Allows the event to cross shadow DOM boundaries
+    detail: { listId: this.listId, itemCount: this.items.length }
+  })
+);
+```
+
+Other components or top-level scripts can listen for this event with native `window.addEventListener("item-added", ...)` or in Lit with `@item-added=${this._onItemAdded}`.
+
+---
+
+## Type Safety Without a Build Step
+
+Add `// @ts-check` at the very top of each `element.js` file.
+
+When using VSCode or an LSP-equipped editor, TypeScript's type checker verifies your component code against the vendored Lit type definitions located in `/internal/server/assets/vendor/`—providing complete compile-time type validation with **zero build step and zero npm packages**.
+
+---
+
+## AI-Assisted Component Authoring
+
+Because Lit adheres directly to the W3C Web Components standard and plain ES modules, AI coding assistants can generate, refactor, and test full components accurately on demand. You can ask an AI assistant:
+
+> *"Generate a Lit web component island `<item-filter>` that takes a `category` attribute, renders an input with `@input` debouncing, and dispatches an `item-filter-changed` event."*
+
+The resulting component will be standard, clean, and immediately functional without any framework-specific setup or toolchain dependencies.

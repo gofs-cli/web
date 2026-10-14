@@ -2,15 +2,17 @@
 sidebar_position: 3
 ---
 
-# Pages and islands
+# Pages, Islands & Declarative Shadow DOM
 
-Gofs apps are multi-page apps. Every route returns a complete HTML page rendered on the server with Go's [html/template](https://pkg.go.dev/html/template). Interactivity is added to a page with _islands_: small web components placed in the server-rendered HTML that take over a part of the page once their JavaScript loads.
+Gofs applications are multi-page applications (MPAs). Every route returns a complete, standards-compliant HTML page rendered on the server with Go's standard [`html/template`](https://pkg.go.dev/html/template). Dynamic interactivity is added to pages through **islands**: small, standards-based web components placed into server-rendered HTML that activate once their lightweight JavaScript loads.
 
-The Go server owns the document. Components own their islands. Nothing owns both, so there is no client-side router, no global client state, and no framework that needs to understand the whole page.
+The Go server owns the document structure, data fetching, and security boundaries. Web components own their local interactivity. Because neither layer oversteps its responsibilities, there is no client-side router, no global client state store, and no heavyweight frontend framework attempting to manage the entire document.
+
+---
 
 ## Layout
 
-The template ships with a layout at `/internal/ui/layout.html`. It contains the `<html>` skeleton, links the stylesheet, and defines the `content` block that each page fills in.
+The default template provides an evergreen HTML layout at `/internal/ui/layout.html`. It establishes the document shell, includes the global stylesheet, configures client-side module resolution with an [import map](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap), and defines the `content` template block that each page populates.
 
 ```html
 <!doctype html>
@@ -24,7 +26,7 @@ The template ships with a layout at `/internal/ui/layout.html`. It contains the 
       {"imports": {"lit": "{{ asset "vendor/lit.js" }}", "@lit/task": "{{ asset "vendor/task.js" }}"}}
     </script>
     <script type="module">
-      // Load the JavaScript for every custom element on this page, and nothing else.
+      // Load the JavaScript for every custom element present on this page, and nothing else.
       const tags = new Set([...document.querySelectorAll("*")].map((e) => e.localName).filter((n) => n.includes("-")));
       for (const tag of tags) import(`/components/${tag}/element.js`);
     </script>
@@ -35,18 +37,26 @@ The template ships with a layout at `/internal/ui/layout.html`. It contains the 
 </html>
 ```
 
-The [import map](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap) lets component code `import { LitElement, html } from "lit"` exactly as in the Lit documentation, while the files are served from your own binary.
+### The Zero-Bundler Island Loader
 
-The loader script is the whole of gofs's "build system". It finds the custom elements present on the page and imports their definitions. A page with no islands loads no JavaScript at all.
+Notice the inline `<script type="module">` in the layout header. This small snippet acts as the entire "build and delivery system" for frontend code:
+1. When the server renders a page, the browser parses the HTML.
+2. The script queries the DOM for all custom elements (any tag containing a hyphen, such as `<todo-list>` or `<app-modal>`).
+3. It dynamically imports `/components/<tag-name>/element.js` only for the components that actually appear on the page.
 
-## Pages
+If a page has no interactive islands, **zero JavaScript is loaded**. If a page contains one island, only that component's file is fetched.
 
-A page is a Go template file that defines the `content` block. Pages live in `/internal/ui/pages` and are rendered by handlers with the `ui.Render` helper from the template.
+---
+
+## Server Pages with Go `html/template`
+
+Pages are standard Go templates residing in `/internal/ui/pages`. Handlers execute templates with the `ui.Render` helper:
 
 ```html
 {{ define "content" }}
 <main>
-  <h1>Hello</h1>
+  <h1>{{ .Title }}</h1>
+  <p>Welcome to an evergreen, standards-driven web application.</p>
 </main>
 {{ end }}
 ```
@@ -54,20 +64,51 @@ A page is a Go template file that defines the `content` block. Pages live in `/i
 ```go
 func Hello() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		ui.Render(w, "hello/index", ui.Data{Title: "Hello"})
+		ui.Render(w, "hello/index", ui.Data{Title: "Hello World"})
 	})
 }
 ```
 
-`html/template` escapes everything it interpolates, so values from the database or the request are safe to render.
+Go's standard `html/template` package automatically provides contextual auto-escaping (for HTML, attributes, JavaScript, and CSS), protecting your application against Cross-Site Scripting (XSS) vulnerabilities by default without external sanitation libraries.
 
-## Islands
+### AI-Accelerated Template Authoring
 
-An island is a custom element in the page. The server renders its initial HTML, including a working `<form>` where there is one, so the page is usable before any JavaScript arrives. When the element's definition loads, it takes over its contents and handles interaction in place.
+In the past, developers sometimes avoided Go's `html/template` because writing nested templates, conditional logic, and HTML boilerplate felt verbose compared to JSX or specialized template languages like `templ`.
+
+Modern AI coding assistants completely neutralize this friction. AI assistants excel at reading, generating, refactoring, and verifying standard Go templates and semantic HTML. Because `html/template` is part of the Go standard library and HTML is a stable W3C standard, AI produces accurate, idiomatic template code on the first attempt—giving you rapid authoring speed without coupling your project to proprietary compilers or runtime dependencies.
+
+---
+
+## Islands: Two Architectural Patterns
+
+Gofs supports two complementary patterns for building web component islands: **Light DOM Islands** and **Declarative Shadow DOM (DSD) Islands**.
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                        Island Architecture                             │
+│                                                                        │
+│   ┌────────────────────────────────┐  ┌─────────────────────────────┐  │
+│   │        Light DOM Island        │  │ Declarative Shadow DOM (DSD)│  │
+│   ├────────────────────────────────┤  ├─────────────────────────────┤  │
+│   │ • Inherits global app.css      │  │ • Strict style encapsulation│  │
+│   │ • Direct access to DOM childs  │  │ • Native SSR with <template>│  │
+│   │ • Ideal for forms, buttons,    │  │ • Reusable widgets, slots   │  │
+│   │   and in-page interactions     │  │ • Zero layout shift / FOUC  │  │
+│   └────────────────────────────────┘  └─────────────────────────────┘  │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+### 1. Light DOM Islands (Default)
+
+For most in-page interactions (such as forms, lists, and search bars), the island should share the application's global typography, colors, and layout styles defined in `app.css`.
+
+In a Light DOM island, the server renders standard HTML directly inside the custom element tag:
 
 ```html
 <todo-list list-id="{{ .ID }}">
-  <ul>{{ range .Items }}<li>{{ . }}</li>{{ end }}</ul>
+  <ul>
+    {{ range .Items }}<li>{{ . }}</li>{{ end }}
+  </ul>
   <form method="post" action="/list/{{ .ID }}">
     <input name="todo-list-item" required />
     <button>Add Item</button>
@@ -75,4 +116,67 @@ An island is a custom element in the page. The server renders its initial HTML, 
 </todo-list>
 ```
 
-See [Components](../frontend/components/best-practice) for how to write one.
+In the component JavaScript, we tell Lit to render into the light DOM rather than creating a shadow root:
+
+```js
+export class TodoList extends LitElement {
+  createRenderRoot() {
+    return this; // Render directly into light DOM
+  }
+}
+```
+
+**Benefits:**
+- Perfect progressive enhancement: the `<form>` works out of the box before JavaScript loads.
+- Global styles in `app.css` apply immediately.
+
+---
+
+### 2. Declarative Shadow DOM (DSD) Islands
+
+When a component requires **strict style encapsulation** (preventing global styles from leaking in, or internal styles from leaking out) or uses native `<slot>` projection, web standards provide **Declarative Shadow DOM**.
+
+DSD is a native browser standard (Baseline Widely Available) that allows the server to emit shadow DOM trees directly in HTML using `<template shadowrootmode="open">`:
+
+```html
+<user-card user-id="{{ .ID }}">
+  <template shadowrootmode="open">
+    <style>
+      :host {
+        display: block;
+        padding: 1rem;
+        border: 1px solid var(--border-color, #ccc);
+        border-radius: 8px;
+      }
+      .badge {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+      }
+    </style>
+    <div class="user-card-header">
+      <span class="badge">{{ .Role }}</span>
+      <h2>{{ .Name }}</h2>
+    </div>
+    <slot></slot>
+  </template>
+  
+  <!-- Content projected into the slot -->
+  <p class="bio">{{ .Bio }}</p>
+</user-card>
+```
+
+#### Why DSD is a Major Leap Forward:
+- **Instant Paint Without JavaScript**: Browsers immediately render the encapsulated shadow DOM while streaming the HTML, eliminating the Flash of Unstyled Content (FOUC) and Cumulative Layout Shift (CLS) historically associated with client-rendered web components.
+- **True Server-Side Rendering (SSR)**: The Go server renders the entire component UI, while CSS scoping remains 100% enforced by the browser engine.
+- **Native Lit Hydration**: When Lit loads on the client, it automatically discovers the existing shadow root rendered by DSD, seamlessly adopting the server-rendered DOM tree without recreating elements or flashing.
+
+---
+
+## When to Use Which Pattern
+
+| Requirement | Recommended Pattern | Rationale |
+| :--- | :--- | :--- |
+| **Interactive Form / List** | **Light DOM Island** | Inherits `app.css`, enables simple progressive enhancement with standard HTML `<form>`. |
+| **Encapsulated UI Widget / Card** | **Declarative Shadow DOM** | Provides strict style scoping and slot projection rendered instantly from the Go server. |
+| **Modal / Dialog** | **Native `<dialog>` element** | Use browser standard `<dialog>` before reaching for custom component wrappers. |
+| **Static Layout or Typography** | **Plain HTML/CSS** | No component or island needed. Keep indirection to a minimum. |

@@ -116,6 +116,10 @@ Wrap each list in a `<todo-list>` element. Inside it, render the items and a pla
 The layout's loader script sees the `<todo-list>` tag on the page and imports `/components/todo-list/element.js`. The component is written in the [Components](./components/element) section.
 :::
 
+:::tip
+Writing server-rendered Go `html/template` files and web component island tags is fast and effortless with modern AI coding assistants. Because HTML and Go templates are stable standards, AI generates and refactors these structures cleanly without the need for custom template compilers or specialized DSLs.
+:::
+
 :::warning
 When forming links, use one of the following methods:
 
