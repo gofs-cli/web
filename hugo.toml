@@ -22,17 +22,13 @@ title = "gofs"
     url = "/#philosophy"
     weight = 1
   [[menu.main]]
-    name = "Components"
-    url = "/#showcase"
-    weight = 2
-  [[menu.main]]
     name = "Architecture"
     url = "/#architecture"
-    weight = 3
+    weight = 2
   [[menu.main]]
     name = "Quick Start"
     url = "/#quickstart"
-    weight = 4
+    weight = 3
   [[menu.main]]
     name = "Blog"
     url = "/blog/"
