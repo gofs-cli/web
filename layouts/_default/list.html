@@ -1,20 +1,22 @@
 {{ define "main" }}
-<div class="prose-container" style="padding-top: 4rem; padding-bottom: 6rem;">
-  <header style="margin-bottom: 3rem;">
-    <h1 style="font-size: 2.5rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.75rem;">{{ .Title }}</h1>
+<div class="prose-container" style="padding-top: var(--snice-spacing-3xl); padding-bottom: var(--snice-spacing-4xl);">
+  <header style="margin-bottom: var(--snice-spacing-2xl);">
+    <h1 style="font-size: 2.5rem; font-weight: 800; letter-spacing: var(--snice-tracking-tight); margin-bottom: var(--snice-spacing-xs); color: var(--snice-color-text);">{{ .Title }}</h1>
     {{ with .Description }}
-    <p style="font-size: 1.125rem; color: var(--muted-foreground);">{{ . }}</p>
+    <p style="font-size: 1.125rem; color: var(--snice-color-text-secondary);">{{ . }}</p>
     {{ end }}
   </header>
 
   <div class="post-feed">
     {{ range .Pages }}
-    <article class="post-card">
-      <h2 class="post-title">
-        <a href="{{ .RelPermalink }}" style="color: inherit; text-decoration: none;">{{ .Title }}</a>
-      </h2>
-      <p class="post-summary">{{ .Summary | plainify | truncate 180 }}</p>
-    </article>
+    <a href="{{ .RelPermalink }}" style="text-decoration: none; color: inherit; display: block;">
+      <snice-card variant="bordered" clickable>
+        <div class="card-inner">
+          <h2 class="post-title" style="margin-bottom: var(--snice-spacing-xs);">{{ .Title }}</h2>
+          <p class="post-summary">{{ .Summary | plainify | truncate 180 }}</p>
+        </div>
+      </snice-card>
+    </a>
     {{ end }}
   </div>
 </div>

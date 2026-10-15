@@ -2,7 +2,7 @@
 
 The product landing page, documentation, and blog for [gofs](https://gofs.dev).
 
-Built with [Hugo](https://gohugo.io/) and a custom, lightweight shadcn-inspired theme written in pure modern CSS. Zero npm dependencies, zero Node.js, and zero JavaScript runtime overhead.
+Built with [Hugo](https://gohugo.io/) and [snice.dev](https://snice.dev) Web Components & design tokens via CDN. Zero npm dependencies, zero Node.js, and zero JavaScript build steps.
 
 ## Local Development
 

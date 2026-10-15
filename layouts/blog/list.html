@@ -1,14 +1,14 @@
 {{ define "main" }}
-<div class="prose-container" style="padding-top: 4rem; padding-bottom: 6rem;">
-  <div style="margin-bottom: 3.5rem;">
-    <div style="margin-bottom: 0.75rem;">
-      <a href="/" style="font-size: 0.875rem; color: var(--muted-foreground); text-decoration: none; display: inline-flex; align-items: center; gap: 0.25rem;">
-        ← Back to Product Home
+<div class="prose-container" style="padding-top: var(--snice-spacing-3xl); padding-bottom: var(--snice-spacing-4xl);">
+  <div style="margin-bottom: var(--snice-spacing-2xl);">
+    <div style="margin-bottom: var(--snice-spacing-md);">
+      <a href="/" style="text-decoration: none;">
+        <snice-button variant="outline" size="small">← Back to Product Home</snice-button>
       </a>
     </div>
-    <h1 style="font-size: 2.5rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.75rem;">Blog & Essays</h1>
-    <p style="font-size: 1.125rem; color: var(--muted-foreground);">
-      Architectural decisions, web standards, and lessons from building evergreen software with Go and Web Components.
+    <h1 style="font-size: 2.5rem; font-weight: 800; letter-spacing: var(--snice-tracking-tight); margin-bottom: var(--snice-spacing-xs); color: var(--snice-color-text);">Blog & Essays</h1>
+    <p style="font-size: 1.125rem; color: var(--snice-color-text-secondary);">
+      Architectural decisions, web standards, and lessons from building evergreen software with Go and snice.dev Web Components.
     </p>
   </div>
 
@@ -17,7 +17,7 @@
     <a href="{{ .RelPermalink }}" style="text-decoration: none; color: inherit; display: block;">
       <snice-card variant="bordered" clickable>
         <div class="card-inner">
-          <div class="post-meta" style="margin-bottom: 0.5rem;">
+          <div class="post-meta" style="margin-bottom: var(--snice-spacing-xs);">
             <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
             <span>•</span>
             <span>{{ .ReadingTime }} min read</span>
@@ -27,9 +27,9 @@
             {{ end }}
           </div>
 
-          <h2 class="post-title" style="margin-bottom: 0.5rem;">{{ .Title }}</h2>
+          <h2 class="post-title" style="margin-bottom: var(--snice-spacing-xs);">{{ .Title }}</h2>
 
-          <p class="post-summary" style="margin-bottom: 1rem;">{{ .Summary | plainify | truncate 200 }}</p>
+          <p class="post-summary" style="margin-bottom: var(--snice-spacing-md);">{{ .Summary | plainify | truncate 200 }}</p>
 
           <div class="post-tags" style="margin-top: auto; display: flex; gap: 0.4rem; flex-wrap: wrap;">
             {{ range .Params.tags }}
