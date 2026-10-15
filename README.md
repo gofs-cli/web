@@ -2,7 +2,7 @@
 
 The product landing page, documentation, and blog for [gofs](https://gofs.dev).
 
-Built with [Hugo](https://gohugo.io/) and [snice.dev](https://snice.dev) Web Components & design tokens via CDN. Zero npm dependencies, zero Node.js, and zero JavaScript build steps.
+Built with [Hugo](https://gohugo.io/) and native Web Components loaded via CDN. Zero npm dependencies, zero Node.js, and zero JavaScript build steps.
 
 ## Local Development
 

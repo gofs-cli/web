@@ -6,7 +6,7 @@ This file provides guidance when working with code in this repository.
 
 The product landing page, documentation, and blog site for **gofs** (https://gofs.dev), a lightweight CLI and architecture for evergreen full-stack Go web applications. 
 
-The site is built with **Hugo** using the **snice.dev** design system and native Web Components via CDN with zero npm dependencies and zero JavaScript build steps. The gofs CLI itself lives in a separate repository (github.com/gofs-cli/gofs).
+The site is built with **Hugo** and native Web Components via CDN with zero npm dependencies and zero JavaScript build steps. The gofs CLI itself lives in a separate repository (github.com/gofs-cli/gofs).
 
 ## Commands
 
@@ -32,7 +32,7 @@ There are no Node.js, npm, or bundler dependencies.
   - `docs/`: Two-column documentation layout with sticky sidebar navigation.
   - `partials/`: Header, footer, head, and doc sidebar partials.
 - **Assets** (`assets/`):
-  - `css/style.css`: Minimal CSS layout rules powered directly by snice.dev design tokens and dark theme.
+  - `css/style.css`: Minimal CSS layout rules powered directly by web component design tokens and dark theme.
 - **Static files** (`static/`):
   - `img/`: SVG logos, icons, and blog images.
   - `CNAME`: Domain configuration (`gofs.dev`).
