@@ -3,8 +3,6 @@ title: "Adding a Handler"
 weight: 3
 ---
 
-# Adding a Handler
-
 Handlers are responsible for accepting incoming requests, validating requests, calling the relevant backend functions, and then constructing a response back to the client. Handlers should be called with relevant server objects they need, for example the database connection, storage bucket, etc.
 
 A handler responds in one of three ways:

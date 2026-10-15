@@ -3,8 +3,6 @@ title: "Adding a Page"
 weight: 1
 ---
 
-# Adding a Page
-
 ## The internal/ui folder
 
 Frontend pages are located in the `/internal/ui/pages` folder. Pages are Go [html/template](https://pkg.go.dev/html/template) files.

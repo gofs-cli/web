@@ -3,8 +3,6 @@ title: "Styling (optional)"
 weight: 3
 ---
 
-# Styling (optional)
-
 Gofs apps are styled with plain CSS. The template ships with a single stylesheet at `/internal/server/assets/app.css` that uses modern, [widely available](https://web.dev/baseline) CSS features: custom properties for colours and spacing, nesting, cascade layers and container queries. There is nothing to install and nothing to compile.
 
 ## Tailwind

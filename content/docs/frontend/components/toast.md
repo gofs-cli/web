@@ -3,8 +3,6 @@ title: "Toast"
 weight: 5
 ---
 
-# Toast
-
 A toast shows a short message and goes away. Most of a toast is HTML and CSS; a small component adds the timer.
 
 ## Server-rendered

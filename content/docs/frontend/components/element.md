@@ -3,8 +3,6 @@ title: "Writing a Component"
 weight: 2
 ---
 
-# Writing a Component
-
 ## Folder Organization
 
 Every custom component lives in its own dedicated folder under `/internal/ui/components`, named to match the custom element's tag name.

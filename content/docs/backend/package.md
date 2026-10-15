@@ -3,8 +3,6 @@ title: "Adding a Package"
 weight: 1
 ---
 
-# Adding a Package
-
 ## The internal/app folder
 
 Backend packages are located in the `/internal/app` folder.

@@ -2,8 +2,8 @@
 <div class="container docs-layout">
   {{ partial "docs-sidebar.html" . }}
   <article class="prose">
-    <header style="margin-bottom: 2rem;">
-      <h1>{{ .Title }}</h1>
+    <header style="margin-bottom: 2rem; border-bottom: 1px solid var(--snice-color-border); padding-bottom: var(--snice-spacing-md);">
+      <h1 style="margin-bottom: 0;">{{ .Title }}</h1>
     </header>
     <div class="article-content">
       {{ .Content }}

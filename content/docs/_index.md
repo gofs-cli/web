@@ -3,8 +3,6 @@ title: "Overview & Philosophy"
 sidebar_position: 1
 ---
 
-# Overview & Philosophy
-
 **Gofs** (Go Full Stack) is a lightweight architectural template and CLI for building evergreen web applications. The server is written in Go using only the standard library. Pages are rendered on the server with Go's `html/template`. Interactivity is delivered through small, standards-based web components written with [Lit](https://lit.dev). Data lives in PostgreSQL and is queried with plain SQL through [sqlc](https://sqlc.dev).
 
 Gofs is designed around a single guiding premise: **minimize runtime dependencies and build on stable, backward-compatible standards.** It leverages Go's backward compatibility promise on the server and the web platform's permanence in the browser to deliver applications that remain maintainable for decades without relentless upgrade churn.
