@@ -1,25 +1,23 @@
-# Gofs website
+# Gofs Website
 
-This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+The product landing page, documentation, and blog for [gofs](https://gofs.dev).
 
-## Installation
-
-```sh
-npm install
-```
+Built with [Hugo](https://gohugo.io/) and native Web Components loaded via CDN. Zero npm dependencies, zero Node.js, and zero JavaScript build steps.
 
 ## Local Development
 
+Ensure you have [Hugo](https://gohugo.io/installation/) installed.
+
 ```sh
-npm run serve
+# Start the local development server with hot-reload
+hugo server
 ```
 
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
+The site will be available at `http://localhost:1313/`.
 
 ## Build
 
 ```sh
-npm run build
+# Generate minified static content into ./public
+hugo --minify
 ```
-
-This command generates static content into the `build` directory and can be served using any static contents hosting service.

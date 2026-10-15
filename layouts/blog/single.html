@@ -1,0 +1,52 @@
+{{ define "main" }}
+<div class="prose-container" style="padding-top: var(--snice-spacing-3xl); padding-bottom: var(--snice-spacing-4xl);">
+  <article class="prose">
+    <header style="margin-bottom: var(--snice-spacing-2xl); padding-bottom: var(--snice-spacing-lg); border-bottom: 1px solid var(--snice-color-border);">
+      <div style="margin-bottom: var(--snice-spacing-md);">
+        <a href="/blog/" style="text-decoration: none;">
+          <snice-button variant="outline" size="small">← Back to all posts</snice-button>
+        </a>
+      </div>
+
+      <h1 style="margin-bottom: var(--snice-spacing-xs);">{{ .Title }}</h1>
+
+      <div class="post-meta" style="margin-bottom: var(--snice-spacing-md);">
+        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+        <span>•</span>
+        <span>{{ .ReadingTime }} min read</span>
+        {{ with .Params.authors }}
+        <span>•</span>
+        <span>By {{ delimit . ", " }}</span>
+        {{ end }}
+      </div>
+
+      <div class="post-tags" style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+        {{ range .Params.tags }}
+        <snice-tag size="small">{{ . }}</snice-tag>
+        {{ end }}
+      </div>
+    </header>
+
+    <div class="article-content">
+      {{ .Content }}
+    </div>
+
+    <footer style="margin-top: var(--snice-spacing-3xl); padding-top: var(--snice-spacing-xl); border-top: 1px solid var(--snice-color-border); display: flex; justify-content: space-between; align-items: center; font-size: 0.9375rem; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        {{ with .PrevInSection }}
+        <a href="{{ .RelPermalink }}" style="color: var(--snice-color-text); text-decoration: none;">
+          <snice-button variant="outline" size="small">← {{ .Title | truncate 30 }}</snice-button>
+        </a>
+        {{ end }}
+      </div>
+      <div>
+        {{ with .NextInSection }}
+        <a href="{{ .RelPermalink }}" style="color: var(--snice-color-text); text-decoration: none;">
+          <snice-button variant="outline" size="small">{{ .Title | truncate 30 }} →</snice-button>
+        </a>
+        {{ end }}
+      </div>
+    </footer>
+  </article>
+</div>
+{{ end }}

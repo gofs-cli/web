@@ -1,0 +1,47 @@
+baseURL = "https://gofs.dev/"
+locale = "en-us"
+title = "gofs"
+
+[pagination]
+  pagerSize = 10
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = true
+    lineNos = false
+    style = "dracula"
+    noClasses = true
+
+[menu]
+  [[menu.main]]
+    name = "Philosophy"
+    url = "/#philosophy"
+    weight = 1
+  [[menu.main]]
+    name = "Architecture"
+    url = "/#architecture"
+    weight = 2
+  [[menu.main]]
+    name = "Quick Start"
+    url = "/#quickstart"
+    weight = 3
+  [[menu.main]]
+    name = "Blog"
+    url = "/blog/"
+    weight = 4
+  [[menu.main]]
+    name = "Docs"
+    url = "/docs/"
+    weight = 5
+  [[menu.main]]
+    name = "GitHub"
+    url = "https://github.com/gofs-cli"
+    weight = 6
+
+[params]
+  description = "Lightweight CLI and architecture for evergreen full-stack Go apps built on web standards, zero runtime dependencies, and AI-accelerated simplicity."
+  author = "gofs-cli"

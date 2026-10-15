@@ -1,0 +1,64 @@
+<aside class="docs-sidebar">
+  {{ $current := . }}
+  <ul class="docs-menu">
+    <li>
+      <div class="docs-menu-group-title">Overview</div>
+      <ul class="docs-submenu">
+        <li><a href="/docs/" class="{{ if eq $current.RelPermalink "/docs/" }}active{{ end }}">Philosophy & Overview</a></li>
+        <li><a href="/docs/start/" class="{{ if eq $current.RelPermalink "/docs/start/" }}active{{ end }}">Quick Start</a></li>
+      </ul>
+    </li>
+    {{ with site.GetPage "/docs/prerequisites" }}
+    <li>
+      <div class="docs-menu-group-title">{{ .Title }}</div>
+      <ul class="docs-submenu">
+        {{ range .Pages.ByWeight }}
+        <li><a href="{{ .RelPermalink }}" class="{{ if eq $current.RelPermalink .RelPermalink }}active{{ end }}">{{ .Title }}</a></li>
+        {{ end }}
+      </ul>
+    </li>
+    {{ end }}
+    {{ with site.GetPage "/docs/core" }}
+    <li>
+      <div class="docs-menu-group-title">{{ .Title }}</div>
+      <ul class="docs-submenu">
+        {{ range .Pages.ByWeight }}
+        <li><a href="{{ .RelPermalink }}" class="{{ if eq $current.RelPermalink .RelPermalink }}active{{ end }}">{{ .Title }}</a></li>
+        {{ end }}
+      </ul>
+    </li>
+    {{ end }}
+    {{ with site.GetPage "/docs/backend" }}
+    <li>
+      <div class="docs-menu-group-title">{{ .Title }}</div>
+      <ul class="docs-submenu">
+        {{ range .Pages.ByWeight }}
+        <li><a href="{{ .RelPermalink }}" class="{{ if eq $current.RelPermalink .RelPermalink }}active{{ end }}">{{ .Title }}</a></li>
+        {{ end }}
+      </ul>
+    </li>
+    {{ end }}
+    {{ with site.GetPage "/docs/frontend" }}
+    <li>
+      <div class="docs-menu-group-title">{{ .Title }}</div>
+      <ul class="docs-submenu">
+        {{ range .Pages.ByWeight }}
+        {{ if not .IsSection }}
+        <li><a href="{{ .RelPermalink }}" class="{{ if eq $current.RelPermalink .RelPermalink }}active{{ end }}">{{ .Title }}</a></li>
+        {{ end }}
+        {{ end }}
+      </ul>
+    </li>
+    {{ end }}
+    {{ with site.GetPage "/docs/frontend/components" }}
+    <li>
+      <div class="docs-menu-group-title">{{ .Title }}</div>
+      <ul class="docs-submenu">
+        {{ range .Pages.ByWeight }}
+        <li><a href="{{ .RelPermalink }}" class="{{ if eq $current.RelPermalink .RelPermalink }}active{{ end }}">{{ .Title }}</a></li>
+        {{ end }}
+      </ul>
+    </li>
+    {{ end }}
+  </ul>
+</aside>

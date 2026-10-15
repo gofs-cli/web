@@ -1,0 +1,21 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ if .IsHome }}{{ site.Title }} — {{ site.Params.description }}{{ else }}{{ .Title }} — {{ site.Title }}{{ end }}</title>
+<meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ site.Params.description }}{{ end }}">
+
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/svg+xml" href="/img/favicon.svg">
+
+<!-- snice.dev Design System & Theme -->
+<link rel="stylesheet" href="https://snice.dev/theme/theme.css">
+
+{{ $css := resources.Get "css/style.css" | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+
+<!-- Web Components (Drop-in CDN, zero build step) -->
+<script src="https://snice.dev/components/snice-runtime.min.js"></script>
+<script async src="https://snice.dev/components/snice-badge.min.js"></script>
+<script async src="https://snice.dev/components/snice-button.min.js"></script>
+<script async src="https://snice.dev/components/snice-card.min.js"></script>
+<script async src="https://snice.dev/components/snice-tag.min.js"></script>
+<script async src="https://snice.dev/components/snice-terminal.min.js"></script>
