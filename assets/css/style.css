@@ -26,6 +26,27 @@
   --radius: 0.5rem;
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+  /* ==========================================================================
+     snice.dev Web Components Theme Overrides
+     ========================================================================== */
+  --snice-color-primary: #38bdf8;
+  --snice-color-primary-hover: #0284c7;
+  --snice-color-surface: #111113;
+  --snice-color-surface-container: #18181b;
+  --snice-color-surface-container-high: #1e1e24;
+  --snice-color-surface-container-low: #111113;
+  --snice-color-border: #27272a;
+  --snice-color-border-hover: #3f3f46;
+  --snice-color-text: #f4f4f5;
+  --snice-color-text-secondary: #a1a1aa;
+  --snice-color-text-tertiary: #71717a;
+  --snice-border-radius-lg: 0.5rem;
+  --snice-border-radius-md: 0.375rem;
+  --snice-terminal-background: #141418;
+  --snice-terminal-foreground: #f4f4f5;
+  --snice-terminal-prompt-color: #38bdf8;
+  --snice-terminal-border-radius: 0.5rem;
 }
 
 *, *::before, *::after {
@@ -783,4 +804,125 @@ img, svg {
     border-bottom: 1px solid var(--border);
     padding-bottom: 1.5rem;
   }
+}
+
+/* ==========================================================================
+   snice.dev Custom Element Styling & Integration
+   ========================================================================== */
+
+snice-card {
+  display: block;
+  --card-bg: var(--card);
+  --card-border-color: var(--card-border);
+  --card-border-radius: var(--radius);
+  --card-padding: 1.75rem;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+snice-card[clickable]:hover {
+  transform: translateY(-2px);
+  --card-border-color: var(--card-hover-border);
+}
+
+a > snice-card {
+  pointer-events: none;
+}
+
+a:hover > snice-card {
+  transform: translateY(-2px);
+  --card-border-color: var(--card-hover-border);
+}
+
+snice-card .card-inner {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+a > snice-button {
+  pointer-events: none;
+}
+
+snice-tabs {
+  display: block;
+  margin: 1.5rem 0;
+  --snice-color-surface: var(--card);
+  --snice-color-border: var(--border);
+  --snice-color-primary: var(--brand-light);
+}
+
+snice-tabs snice-tab {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  cursor: pointer;
+}
+
+snice-tabs snice-tab-panel {
+  padding: 1.5rem 0 0.5rem;
+}
+
+snice-terminal {
+  display: block;
+  font-family: var(--font-mono);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+snice-code-block {
+  display: block;
+  margin: 1.25rem 0;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--code-bg);
+}
+
+snice-badge {
+  display: inline-flex;
+}
+
+snice-button {
+  display: inline-flex;
+  font-family: var(--font-sans);
+  font-weight: 500;
+}
+
+snice-alert {
+  display: block;
+  margin: 1.5rem 0;
+  border-radius: var(--radius);
+}
+
+/* Showcase Component Grid & Playground */
+.showcase-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: stretch;
+}
+
+@media (max-width: 900px) {
+  .showcase-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.demo-preview-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.demo-component-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
 }

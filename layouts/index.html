@@ -2,9 +2,12 @@
 <!-- Hero Section -->
 <section class="hero">
   <div class="container hero-content">
-    <div class="badge">
-      <span class="badge-dot"></span>
-      <span>gofs v2 — evergreen full-stack Go</span>
+    <div style="margin-bottom: 1.25rem;">
+      <snice-badge dot pulse variant="success">
+        <span style="font-weight: 500; font-size: 0.85rem; padding: 0.25rem 0.65rem; color: var(--foreground); display: inline-flex; align-items: center; gap: 0.4rem;">
+          <strong>gofs v2</strong> — evergreen full-stack Go with Web Components
+        </span>
+      </snice-badge>
     </div>
     
     <h1 class="hero-title">Build Web Apps That Never Break.</h1>
@@ -14,36 +17,168 @@
     </p>
     
     <div class="hero-actions">
-      <a href="#quickstart" class="btn btn-primary">Quick Start</a>
-      <a href="#philosophy" class="btn btn-secondary">Our Philosophy</a>
-      <a href="/blog/" class="btn btn-outline">Read the Blog</a>
+      <a href="#quickstart">
+        <snice-button variant="primary" size="large">Quick Start</snice-button>
+      </a>
+      <a href="#showcase">
+        <snice-button variant="outline" size="large">Components Showcase</snice-button>
+      </a>
+      <a href="#philosophy">
+        <snice-button variant="default" size="large">Our Philosophy</snice-button>
+      </a>
+      <a href="/blog/">
+        <snice-button variant="outline" size="large">Read the Blog</snice-button>
+      </a>
     </div>
 
-    <!-- Terminal Box -->
-    <div class="terminal-box">
-      <div class="terminal-header">
-        <div class="terminal-dots">
-          <span class="terminal-dot"></span>
-          <span class="terminal-dot"></span>
-          <span class="terminal-dot"></span>
-        </div>
-        <span>terminal</span>
-      </div>
-      <div class="terminal-body">
-        <div class="cmd-line">
-          <span class="cmd-prompt">$</span>
-          <span>go install github.com/gofs-cli/gofs@latest</span>
-        </div>
-        <div class="cmd-line" style="margin-top: 0.5rem;">
-          <span class="cmd-prompt">$</span>
-          <span>gofs init github.com/myorg/myapp</span>
-        </div>
-        <div class="cmd-line" style="margin-top: 0.5rem;">
-          <span class="cmd-prompt">$</span>
-          <span>cd myapp && make</span>
-        </div>
-        <p class="cmd-comment"># => Running on http://localhost:8080 (0 npm dependencies)</p>
-      </div>
+    <!-- Terminal Box powered by snice-terminal -->
+    <div style="width: 100%; max-width: 680px; margin: 0 auto; text-align: left;">
+      <snice-terminal id="hero-terminal" prompt="$ " readonly style="height: 200px;"></snice-terminal>
+      <script>
+        customElements.whenDefined('snice-terminal').then(() => {
+          const term = document.getElementById('hero-terminal');
+          if (term) {
+            term.writeln('$ go install github.com/gofs-cli/gofs@latest', 'input');
+            term.writeln('$ gofs init github.com/myorg/myapp', 'input');
+            term.writeln('$ cd myapp && make', 'input');
+            term.writeln('# => Server listening on http://localhost:8080 (0 npm dependencies, pure Go & Web Components)', 'info');
+          }
+        });
+      </script>
+    </div>
+  </div>
+</section>
+
+<!-- Web Components Showcase Section -->
+<section class="section" id="showcase">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-tag">Web Standards in Action</p>
+      <h2 class="section-title">Go html/template Meets Web Components</h2>
+      <p class="section-desc">
+        Experience the power of Go server templates generating drop-in <code style="font-size:0.9em; color: var(--brand-light);">snice.dev</code> custom elements via CDN. Zero node_modules, zero JavaScript build chain, 100% standards.
+      </p>
+    </div>
+
+    <!-- Interactive Component Playground & Code Comparison -->
+    <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.4);">
+      <snice-tabs>
+        <snice-tab slot="nav">1. Go html/template Source</snice-tab>
+        <snice-tab slot="nav">2. Drop-in CDN Integration</snice-tab>
+        <snice-tab slot="nav">3. Live Interactive Preview</snice-tab>
+
+        <!-- Tab 1: Go Template Code -->
+        <snice-tab-panel>
+          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <p style="font-size: 0.9375rem; color: var(--muted-foreground);">
+              Go's built-in <code style="color:var(--brand-light);">html/template</code> writes standard HTML elements. Dynamic structs interpolate directly into custom element attributes and slots with automatic XSS escaping:
+            </p>
+            <pre style="background: var(--code-bg); padding: 1.25rem; border-radius: var(--radius); border: 1px solid var(--border); overflow-x: auto; font-family: var(--font-mono); font-size: 0.875rem; line-height: 1.6;"><code>{{ `<!-- views/user_card.html: Zero JSX, Zero Transpilation -->
+<snice-card variant="bordered">
+  <div slot="header" style="display:flex; justify-content:space-between; align-items:center;">
+    <h3 style="margin:0; font-size:1.1rem;">{{ .Project.Name }}</h3>
+    <snice-badge inline variant="{{ .Project.StatusVariant }}" content="{{ .Project.Status }}"></snice-badge>
+  </div>
+  
+  <p style="color: var(--muted-foreground); margin: 0.75rem 0;">{{ .Project.Description }}</p>
+
+  <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom: 1rem;">
+    {{ range .Project.Tags }}
+    <snice-tag size="small">{{ . }}</snice-tag>
+    {{ end }}
+  </div>
+
+  <div slot="footer" style="display:flex; justify-content:flex-end; gap:0.5rem;">
+    <snice-button variant="outline" size="small">View Logs</snice-button>
+    <snice-button variant="primary" size="small">Deploy</snice-button>
+  </div>
+</snice-card>` }}</code></pre>
+          </div>
+        </snice-tab-panel>
+
+        <!-- Tab 2: CDN Integration -->
+        <snice-tab-panel>
+          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <p style="font-size: 0.9375rem; color: var(--muted-foreground);">
+              Include the components directly in your layout shell from the CDN. No <code style="color:var(--brand-light);">package.json</code>, no bundlers, no supply chain risk:
+            </p>
+            <pre style="background: var(--code-bg); padding: 1.25rem; border-radius: var(--radius); border: 1px solid var(--border); overflow-x: auto; font-family: var(--font-mono); font-size: 0.875rem; line-height: 1.6;"><code>{{ `<!-- In your Go base layout: layouts/base.html -->
+<link rel="stylesheet" href="https://snice.dev/theme/theme.css">
+<script src="https://snice.dev/components/snice-runtime.min.js"></script>
+<script async src="https://snice.dev/components/snice-card.min.js"></script>
+<script async src="https://snice.dev/components/snice-badge.min.js"></script>
+<script async src="https://snice.dev/components/snice-button.min.js"></script>
+<script async src="https://snice.dev/components/snice-alert.min.js"></script>
+<script async src="https://snice.dev/components/snice-tag.min.js"></script>
+<script async src="https://snice.dev/components/snice-terminal.min.js"></script>
+
+<!-- The browser loads and registers custom elements natively -->` }}</code></pre>
+          </div>
+        </snice-tab-panel>
+
+        <!-- Tab 3: Live Component Demo -->
+        <snice-tab-panel>
+          <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+            <snice-alert variant="info" title="Live Web Components">
+              The cards, badges, tags, and buttons below are live W3C Custom Elements rendered by this Hugo template and running directly in your browser.
+            </snice-alert>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+              <!-- Demo Card 1 -->
+              <snice-card variant="bordered">
+                <div slot="header" style="display:flex; justify-content:space-between; align-items:center;">
+                  <span style="font-weight: 600; font-size: 1.05rem;">gofs Production API</span>
+                  <snice-badge inline variant="success" content="Healthy"></snice-badge>
+                </div>
+                
+                <p style="color: var(--muted-foreground); font-size: 0.875rem; margin: 0.75rem 0;">
+                  Evergreen Go server handling requests with standard <code style="font-size:0.85em">net/http</code> and compile-time verified <code style="font-size:0.85em">sqlc</code> queries.
+                </p>
+
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem;">
+                  <snice-tag size="small">Go 1.24</snice-tag>
+                  <snice-tag size="small">sqlc</snice-tag>
+                  <snice-tag size="small">PostgreSQL</snice-tag>
+                </div>
+
+                <div slot="footer" style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="font-size: 0.8125rem; color: var(--muted-foreground);">Latency: 4ms</span>
+                  <div style="display: flex; gap: 0.5rem;">
+                    <snice-button variant="outline" size="small" onclick="alert('Viewing production metrics...')">Metrics</snice-button>
+                    <snice-button variant="primary" size="small" onclick="alert('Triggered live sync!')">Sync</snice-button>
+                  </div>
+                </div>
+              </snice-card>
+
+              <!-- Demo Card 2 -->
+              <snice-card variant="bordered">
+                <div slot="header" style="display:flex; justify-content:space-between; align-items:center;">
+                  <span style="font-weight: 600; font-size: 1.05rem;">Web Standards Client</span>
+                  <snice-badge inline variant="primary" content="snice.dev"></snice-badge>
+                </div>
+                
+                <p style="color: var(--muted-foreground); font-size: 0.875rem; margin: 0.75rem 0;">
+                  Native Custom Elements loaded via CDN. Zero node_modules, zero bundling step, and instant browser paint.
+                </p>
+
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem;">
+                  <snice-tag size="small">Web Components</snice-tag>
+                  <snice-tag size="small">Shadow DOM</snice-tag>
+                  <snice-tag size="small">0 npm</snice-tag>
+                </div>
+
+                <div slot="footer" style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="font-size: 0.8125rem; color: var(--muted-foreground);">Size: ~12 KB</span>
+                  <div style="display: flex; gap: 0.5rem;">
+                    <snice-button variant="outline" size="small" onclick="location.href='/docs/'">Read Docs</snice-button>
+                    <snice-button variant="primary" size="small" onclick="location.href='#quickstart'">Install CLI</snice-button>
+                  </div>
+                </div>
+              </snice-card>
+            </div>
+          </div>
+        </snice-tab-panel>
+      </snice-tabs>
     </div>
   </div>
 </section>
@@ -61,58 +196,88 @@
 
     <div class="cards-grid">
       <!-- Card 1 -->
-      <div class="card">
-        <div class="card-icon">🛡️</div>
-        <h3 class="card-title">Go 1 Backward Compatibility</h3>
-        <p class="card-desc">
-          Go was built for long-term engineering. The Go 1 compatibility guarantee ensures an app written today compiles and runs unchanged decades later. The server relies on Go's standard library (<code style="font-size:0.85em">net/http</code>, <code style="font-size:0.85em">html/template</code>, <code style="font-size:0.85em">database/sql</code>) with zero external framework lock-in.
-        </p>
-      </div>
+      <snice-card variant="bordered">
+        <div class="card-inner">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+            <div class="card-icon" style="margin-bottom: 0;">🛡️</div>
+            <snice-badge inline variant="primary" content="Guaranteed"></snice-badge>
+          </div>
+          <h3 class="card-title">Go 1 Backward Compatibility</h3>
+          <p class="card-desc">
+            Go was built for long-term engineering. The Go 1 compatibility guarantee ensures an app written today compiles and runs unchanged decades later. The server relies on Go's standard library (<code style="font-size:0.85em">net/http</code>, <code style="font-size:0.85em">html/template</code>, <code style="font-size:0.85em">database/sql</code>) with zero external framework lock-in.
+          </p>
+        </div>
+      </snice-card>
 
       <!-- Card 2 -->
-      <div class="card">
-        <div class="card-icon">⚡</div>
-        <h3 class="card-title">Zero Runtime Dependencies with sqlc</h3>
-        <p class="card-desc">
-          Traditional ORMs bundle massive reflection, breaking changes, and runtime baggage. <code style="font-size:0.85em">sqlc</code> checks raw SQL against your schema at compile time and writes standard Go code importing only <code style="font-size:0.85em">database/sql</code>. It bundles zero runtime dependencies and is committed to git.
-        </p>
-      </div>
+      <snice-card variant="bordered">
+        <div class="card-inner">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+            <div class="card-icon" style="margin-bottom: 0;">⚡</div>
+            <snice-badge inline variant="success" content="0 Runtime Dependencies"></snice-badge>
+          </div>
+          <h3 class="card-title">Zero Runtime Overhead with sqlc</h3>
+          <p class="card-desc">
+            Traditional ORMs bundle massive reflection, breaking changes, and runtime baggage. <code style="font-size:0.85em">sqlc</code> checks raw SQL against your schema at compile time and writes standard Go code importing only <code style="font-size:0.85em">database/sql</code>. It bundles zero runtime dependencies and is committed to git.
+          </p>
+        </div>
+      </snice-card>
 
       <!-- Card 3 -->
-      <div class="card">
-        <div class="card-icon">🌐</div>
-        <h3 class="card-title">Web Standards First</h3>
-        <p class="card-desc">
-          "The browser does not break the web." HTML, CSS, and DOM APIs written in 1995 still render today. Gofs builds on native semantic HTML (<code style="font-size:0.85em">&lt;form&gt;</code>, <code style="font-size:0.85em">&lt;dialog&gt;</code>), modern Baseline CSS, and standard Custom Elements instead of transient JavaScript frameworks.
-        </p>
-      </div>
+      <snice-card variant="bordered">
+        <div class="card-inner">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+            <div class="card-icon" style="margin-bottom: 0;">🌐</div>
+            <snice-badge inline variant="info" content="W3C Standards"></snice-badge>
+          </div>
+          <h3 class="card-title">Web Standards First</h3>
+          <p class="card-desc">
+            "The browser does not break the web." HTML, CSS, and DOM APIs written in 1995 still render today. Gofs builds on native semantic HTML (<code style="font-size:0.85em">&lt;form&gt;</code>, <code style="font-size:0.85em">&lt;dialog&gt;</code>), modern Baseline CSS, and standard Custom Elements like <code style="font-size:0.85em">snice.dev</code> instead of transient JavaScript frameworks.
+          </p>
+        </div>
+      </snice-card>
 
       <!-- Card 4 -->
-      <div class="card">
-        <div class="card-icon">📦</div>
-        <h3 class="card-title">Declarative Shadow DOM (DSD)</h3>
-        <p class="card-desc">
-          Server-rendered web components with native style encapsulation. Using <code style="font-size:0.85em">&lt;template shadowrootmode="open"&gt;</code>, the Go server outputs encapsulated component trees directly in HTML. Browsers paint instantly with zero layout shift and zero JavaScript required for initial render.
-        </p>
-      </div>
+      <snice-card variant="bordered">
+        <div class="card-inner">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+            <div class="card-icon" style="margin-bottom: 0;">📦</div>
+            <snice-badge inline variant="warning" content="Encapsulated"></snice-badge>
+          </div>
+          <h3 class="card-title">Declarative Shadow DOM (DSD)</h3>
+          <p class="card-desc">
+            Server-rendered web components with native style encapsulation. Using <code style="font-size:0.85em">&lt;template shadowrootmode="open"&gt;</code>, the Go server outputs encapsulated component trees directly in HTML. Browsers paint instantly with zero layout shift and zero JavaScript required for initial render.
+          </p>
+        </div>
+      </snice-card>
 
       <!-- Card 5 -->
-      <div class="card">
-        <div class="card-icon">🤖</div>
-        <h3 class="card-title">AI-Accelerated Simplicity</h3>
-        <p class="card-desc">
-          Historically, developers adopted complex frameworks and custom DSLs (like <code style="font-size:0.85em">templ</code> or JSX) because hand-writing boilerplate HTML felt tedious. Today, AI writes standard Go templates, HTML, and SQL effortlessly. AI eliminates the excuse for fragile abstractions.
-        </p>
-      </div>
+      <snice-card variant="bordered">
+        <div class="card-inner">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+            <div class="card-icon" style="margin-bottom: 0;">🤖</div>
+            <snice-badge inline variant="primary" content="AI Native"></snice-badge>
+          </div>
+          <h3 class="card-title">AI-Accelerated Simplicity</h3>
+          <p class="card-desc">
+            Historically, developers adopted complex frameworks and custom DSLs (like <code style="font-size:0.85em">templ</code> or JSX) because hand-writing boilerplate HTML felt tedious. Today, AI writes standard Go templates, HTML, and SQL effortlessly. AI eliminates the excuse for fragile abstractions.
+          </p>
+        </div>
+      </snice-card>
 
       <!-- Card 6 -->
-      <div class="card">
-        <div class="card-icon">🔒</div>
-        <h3 class="card-title">Immunity from Supply Chain Attacks</h3>
-        <p class="card-desc">
-          No <code style="font-size:0.85em">package.json</code>, no npm, and no <code style="font-size:0.85em">node_modules</code>. The only client library used (Lit) is vendored as a pinned, checksummed ES module served directly from the compiled Go binary. Zero unvetted third-party scripts execute in your production environment.
-        </p>
-      </div>
+      <snice-card variant="bordered">
+        <div class="card-inner">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+            <div class="card-icon" style="margin-bottom: 0;">🔒</div>
+            <snice-badge inline variant="success" content="Zero npm"></snice-badge>
+          </div>
+          <h3 class="card-title">Immunity from Supply Chain Attacks</h3>
+          <p class="card-desc">
+            No <code style="font-size:0.85em">package.json</code>, no npm, and no <code style="font-size:0.85em">node_modules</code>. Web components are loaded via pinned CDN URLs or vendored directly in the Go binary with content-hashed checksums. Zero unvetted third-party scripts execute in your production environment.
+          </p>
+        </div>
+      </snice-card>
     </div>
   </div>
 </section>
@@ -137,8 +302,8 @@
           <div class="blueprint-item-desc">Native browser navigation, bookmarks, and back/forward buttons work without any client router.</div>
         </div>
         <div class="blueprint-item">
-          <div class="blueprint-item-title">Lit Islands (~5 KB)</div>
-          <div class="blueprint-item-desc">Custom Elements that progressively enhance server HTML. Loaded by name on-demand with zero bundler.</div>
+          <div class="blueprint-item-title">CDN Web Components</div>
+          <div class="blueprint-item-desc">Standard custom elements (snice.dev / Lit islands) loaded on demand. No build step or bundlers.</div>
         </div>
         <div class="blueprint-item">
           <div class="blueprint-item-title">Modern Baseline CSS</div>
@@ -190,28 +355,37 @@
       <p class="section-tag">Quick Start</p>
       <h2 class="section-title">Get Started in Seconds</h2>
       <p class="section-desc">
-        Install the CLI, initialize your project, and start building with standard Go.
+        Install the CLI, initialize your project, and start building with standard Go and Web Components.
       </p>
     </div>
 
-    <div style="max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem;">
-      <div class="card" style="padding: 1.5rem;">
-        <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem;">1. Install the CLI</h4>
-        <p style="font-size: 0.9rem; color: var(--muted-foreground); margin-bottom: 0.75rem;">Requires Go 1.24+.</p>
+    <div style="max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem;">
+      <snice-card variant="bordered">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <h4 style="font-size: 1.1rem; margin: 0; font-weight: 600;">1. Install the CLI</h4>
+          <snice-tag size="small">Go 1.24+</snice-tag>
+        </div>
+        <p style="font-size: 0.9rem; color: var(--muted-foreground); margin-bottom: 0.75rem;">Download and compile the gofs CLI binary to your Go bin path.</p>
         <pre style="background: var(--code-bg); padding: 0.85rem 1rem; border-radius: var(--radius); border: 1px solid var(--border); font-family: var(--font-mono); font-size: 0.875rem;"><code>go install github.com/gofs-cli/gofs@latest</code></pre>
-      </div>
+      </snice-card>
 
-      <div class="card" style="padding: 1.5rem;">
-        <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem;">2. Initialize your project</h4>
-        <p style="font-size: 0.9rem; color: var(--muted-foreground); margin-bottom: 0.75rem;">Provide your Go module path.</p>
+      <snice-card variant="bordered">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <h4 style="font-size: 1.1rem; margin: 0; font-weight: 600;">2. Initialize your project</h4>
+          <snice-tag size="small">Standard Layout</snice-tag>
+        </div>
+        <p style="font-size: 0.9rem; color: var(--muted-foreground); margin-bottom: 0.75rem;">Generate an evergreen project structure with Go standard library and web components.</p>
         <pre style="background: var(--code-bg); padding: 0.85rem 1rem; border-radius: var(--radius); border: 1px solid var(--border); font-family: var(--font-mono); font-size: 0.875rem;"><code>gofs init github.com/myorg/myapp</code></pre>
-      </div>
+      </snice-card>
 
-      <div class="card" style="padding: 1.5rem;">
-        <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem;">3. Run with Make</h4>
-        <p style="font-size: 0.9rem; color: var(--muted-foreground); margin-bottom: 0.75rem;">The generated project includes a simple Makefile for development.</p>
+      <snice-card variant="bordered">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <h4 style="font-size: 1.1rem; margin: 0; font-weight: 600;">3. Run with Make</h4>
+          <snice-tag size="small">Zero npm</snice-tag>
+        </div>
+        <p style="font-size: 0.9rem; color: var(--muted-foreground); margin-bottom: 0.75rem;">Start the development server with live reload and automatic sqlc validation.</p>
         <pre style="background: var(--code-bg); padding: 0.85rem 1rem; border-radius: var(--radius); border: 1px solid var(--border); font-family: var(--font-mono); font-size: 0.875rem;"><code>cd myapp && make</code></pre>
-      </div>
+      </snice-card>
     </div>
   </div>
 </section>
@@ -229,25 +403,31 @@
 
     <div class="cards-grid">
       {{ range first 3 (where site.RegularPages "Section" "blog") }}
-      <a href="{{ .RelPermalink }}" class="card" style="text-decoration: none;">
-        <div class="post-meta">
-          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
-          <span>•</span>
-          <span>{{ .ReadingTime }} min read</span>
-        </div>
-        <h3 class="card-title" style="margin-top: 0.5rem;">{{ .Title }}</h3>
-        <p class="card-desc">{{ .Summary | plainify | truncate 130 }}</p>
-        <div class="post-tags" style="margin-top: auto; padding-top: 1rem;">
-          {{ range .Params.tags }}
-          <span class="post-tag">{{ . }}</span>
-          {{ end }}
-        </div>
+      <a href="{{ .RelPermalink }}" style="text-decoration: none; color: inherit; display: block;">
+        <snice-card variant="bordered" clickable style="height: 100%;">
+          <div class="card-inner">
+            <div class="post-meta" style="margin-bottom: 0.5rem;">
+              <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+              <span>•</span>
+              <span>{{ .ReadingTime }} min read</span>
+            </div>
+            <h3 class="card-title" style="margin-top: 0.25rem;">{{ .Title }}</h3>
+            <p class="card-desc">{{ .Summary | plainify | truncate 130 }}</p>
+            <div class="post-tags" style="margin-top: auto; padding-top: 1rem; display: flex; gap: 0.4rem; flex-wrap: wrap;">
+              {{ range .Params.tags }}
+              <snice-tag size="small">{{ . }}</snice-tag>
+              {{ end }}
+            </div>
+          </div>
+        </snice-card>
       </a>
       {{ end }}
     </div>
 
-    <div style="text-align: center; margin-top: 3rem;">
-      <a href="/blog/" class="btn btn-outline">View All Articles →</a>
+    <div style="text-align: center; margin-top: 3.5rem;">
+      <a href="/blog/">
+        <snice-button variant="outline" size="large">View All Blog Articles →</snice-button>
+      </a>
     </div>
   </div>
 </section>

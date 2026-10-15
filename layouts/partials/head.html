@@ -8,3 +8,16 @@
 
 {{ $css := resources.Get "css/style.css" | minify | fingerprint }}
 <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+
+<!-- snice.dev Web Components (Drop-in CDN, zero build step) -->
+<link rel="stylesheet" href="https://snice.dev/theme/theme.css">
+<script src="https://snice.dev/components/snice-runtime.min.js"></script>
+<script async src="https://snice.dev/components/snice-badge.min.js"></script>
+<script async src="https://snice.dev/components/snice-button.min.js"></script>
+<script async src="https://snice.dev/components/snice-card.min.js"></script>
+<script async src="https://snice.dev/components/snice-code-block.min.js"></script>
+<script async src="https://snice.dev/components/snice-terminal.min.js"></script>
+<script async src="https://snice.dev/components/snice-tabs.min.js"></script>
+<script async src="https://snice.dev/components/snice-alert.min.js"></script>
+<script async src="https://snice.dev/components/snice-tag.min.js"></script>
+<script async src="https://snice.dev/components/snice-tooltip.min.js"></script>
