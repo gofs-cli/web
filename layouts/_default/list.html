@@ -1,0 +1,21 @@
+{{ define "main" }}
+<div class="prose-container" style="padding-top: 4rem; padding-bottom: 6rem;">
+  <header style="margin-bottom: 3rem;">
+    <h1 style="font-size: 2.5rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.75rem;">{{ .Title }}</h1>
+    {{ with .Description }}
+    <p style="font-size: 1.125rem; color: var(--muted-foreground);">{{ . }}</p>
+    {{ end }}
+  </header>
+
+  <div class="post-feed">
+    {{ range .Pages }}
+    <article class="post-card">
+      <h2 class="post-title">
+        <a href="{{ .RelPermalink }}" style="color: inherit; text-decoration: none;">{{ .Title }}</a>
+      </h2>
+      <p class="post-summary">{{ .Summary | plainify | truncate 180 }}</p>
+    </article>
+    {{ end }}
+  </div>
+</div>
+{{ end }}

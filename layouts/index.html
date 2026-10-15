@@ -1,0 +1,254 @@
+{{ define "main" }}
+<!-- Hero Section -->
+<section class="hero">
+  <div class="container hero-content">
+    <div class="badge">
+      <span class="badge-dot"></span>
+      <span>gofs v2 — evergreen full-stack Go</span>
+    </div>
+    
+    <h1 class="hero-title">Build Web Apps That Never Break.</h1>
+    
+    <p class="hero-subtitle">
+      A lightweight Go architecture leveraging native web standards, zero runtime dependencies, and AI-accelerated simplicity. No npm, no heavy JavaScript frameworks, no upgrade treadmill.
+    </p>
+    
+    <div class="hero-actions">
+      <a href="#quickstart" class="btn btn-primary">Quick Start</a>
+      <a href="#philosophy" class="btn btn-secondary">Our Philosophy</a>
+      <a href="/blog/" class="btn btn-outline">Read the Blog</a>
+    </div>
+
+    <!-- Terminal Box -->
+    <div class="terminal-box">
+      <div class="terminal-header">
+        <div class="terminal-dots">
+          <span class="terminal-dot"></span>
+          <span class="terminal-dot"></span>
+          <span class="terminal-dot"></span>
+        </div>
+        <span>terminal</span>
+      </div>
+      <div class="terminal-body">
+        <div class="cmd-line">
+          <span class="cmd-prompt">$</span>
+          <span>go install github.com/gofs-cli/gofs@latest</span>
+        </div>
+        <div class="cmd-line" style="margin-top: 0.5rem;">
+          <span class="cmd-prompt">$</span>
+          <span>gofs init github.com/myorg/myapp</span>
+        </div>
+        <div class="cmd-line" style="margin-top: 0.5rem;">
+          <span class="cmd-prompt">$</span>
+          <span>cd myapp && make</span>
+        </div>
+        <p class="cmd-comment"># => Running on http://localhost:8080 (0 npm dependencies)</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Philosophy Section -->
+<section class="section" id="philosophy">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-tag">Philosophy</p>
+      <h2 class="section-title">The Problem with Modern Dependencies</h2>
+      <p class="section-desc">
+        Managing dependencies has become the single largest tax on engineering velocity. Breaking changes, supply chain vulnerabilities, and framework obsolescence drain teams into spending 80% of their time "standing still."
+      </p>
+    </div>
+
+    <div class="cards-grid">
+      <!-- Card 1 -->
+      <div class="card">
+        <div class="card-icon">🛡️</div>
+        <h3 class="card-title">Go 1 Backward Compatibility</h3>
+        <p class="card-desc">
+          Go was built for long-term engineering. The Go 1 compatibility guarantee ensures an app written today compiles and runs unchanged decades later. The server relies on Go's standard library (<code style="font-size:0.85em">net/http</code>, <code style="font-size:0.85em">html/template</code>, <code style="font-size:0.85em">database/sql</code>) with zero external framework lock-in.
+        </p>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="card">
+        <div class="card-icon">⚡</div>
+        <h3 class="card-title">Zero Runtime Dependencies with sqlc</h3>
+        <p class="card-desc">
+          Traditional ORMs bundle massive reflection, breaking changes, and runtime baggage. <code style="font-size:0.85em">sqlc</code> checks raw SQL against your schema at compile time and writes standard Go code importing only <code style="font-size:0.85em">database/sql</code>. It bundles zero runtime dependencies and is committed to git.
+        </p>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="card">
+        <div class="card-icon">🌐</div>
+        <h3 class="card-title">Web Standards First</h3>
+        <p class="card-desc">
+          "The browser does not break the web." HTML, CSS, and DOM APIs written in 1995 still render today. Gofs builds on native semantic HTML (<code style="font-size:0.85em">&lt;form&gt;</code>, <code style="font-size:0.85em">&lt;dialog&gt;</code>), modern Baseline CSS, and standard Custom Elements instead of transient JavaScript frameworks.
+        </p>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="card">
+        <div class="card-icon">📦</div>
+        <h3 class="card-title">Declarative Shadow DOM (DSD)</h3>
+        <p class="card-desc">
+          Server-rendered web components with native style encapsulation. Using <code style="font-size:0.85em">&lt;template shadowrootmode="open"&gt;</code>, the Go server outputs encapsulated component trees directly in HTML. Browsers paint instantly with zero layout shift and zero JavaScript required for initial render.
+        </p>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="card">
+        <div class="card-icon">🤖</div>
+        <h3 class="card-title">AI-Accelerated Simplicity</h3>
+        <p class="card-desc">
+          Historically, developers adopted complex frameworks and custom DSLs (like <code style="font-size:0.85em">templ</code> or JSX) because hand-writing boilerplate HTML felt tedious. Today, AI writes standard Go templates, HTML, and SQL effortlessly. AI eliminates the excuse for fragile abstractions.
+        </p>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="card">
+        <div class="card-icon">🔒</div>
+        <h3 class="card-title">Immunity from Supply Chain Attacks</h3>
+        <p class="card-desc">
+          No <code style="font-size:0.85em">package.json</code>, no npm, and no <code style="font-size:0.85em">node_modules</code>. The only client library used (Lit) is vendored as a pinned, checksummed ES module served directly from the compiled Go binary. Zero unvetted third-party scripts execute in your production environment.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Architecture Blueprint Section -->
+<section class="section" id="architecture">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-tag">Architecture</p>
+      <h2 class="section-title">Clean Separation, Zero Bloat</h2>
+      <p class="section-desc">
+        The Go server owns the document and data boundaries. Web components own local interactivity. Nothing owns both.
+      </p>
+    </div>
+
+    <div class="blueprint-box">
+      <!-- Column 1 -->
+      <div class="blueprint-col">
+        <span class="blueprint-col-title">1. The Client (Web Platform)</span>
+        <div class="blueprint-item">
+          <div class="blueprint-item-title">Multi-Page Architecture</div>
+          <div class="blueprint-item-desc">Native browser navigation, bookmarks, and back/forward buttons work without any client router.</div>
+        </div>
+        <div class="blueprint-item">
+          <div class="blueprint-item-title">Lit Islands (~5 KB)</div>
+          <div class="blueprint-item-desc">Custom Elements that progressively enhance server HTML. Loaded by name on-demand with zero bundler.</div>
+        </div>
+        <div class="blueprint-item">
+          <div class="blueprint-item-title">Modern Baseline CSS</div>
+          <div class="blueprint-item-desc">Native CSS nesting, container queries, custom properties, and :has(). Zero PostCSS or build chains.</div>
+        </div>
+      </div>
+
+      <!-- Column 2 -->
+      <div class="blueprint-col">
+        <span class="blueprint-col-title">2. The Server (Go Standard Library)</span>
+        <div class="blueprint-item">
+          <div class="blueprint-item-title">net/http Routing</div>
+          <div class="blueprint-item-desc">Standard Go enhanced router in a single clean <code style="font-size:0.8em">routes.go</code> file. No third-party router needed.</div>
+        </div>
+        <div class="blueprint-item">
+          <div class="blueprint-item-title">html/template Rendering</div>
+          <div class="blueprint-item-desc">Context-aware auto-escaping protecting against XSS vulnerabilities natively on the server.</div>
+        </div>
+        <div class="blueprint-item">
+          <div class="blueprint-item-title">//go:embed Static Assets</div>
+          <div class="blueprint-item-desc">Stylesheets and vendored libraries are embedded into the Go binary with content-hashed URLs.</div>
+        </div>
+      </div>
+
+      <!-- Column 3 -->
+      <div class="blueprint-col">
+        <span class="blueprint-col-title">3. The Database (sqlc + PostgreSQL)</span>
+        <div class="blueprint-item">
+          <div class="blueprint-item-title">Plain SQL Queries</div>
+          <div class="blueprint-item-desc">Write standard SQL with :one, :many, or :exec annotations. No proprietary ORM query languages.</div>
+        </div>
+        <div class="blueprint-item">
+          <div class="blueprint-item-title">Type-Safe Go Generation</div>
+          <div class="blueprint-item-desc">sqlc generates strongly-typed Go functions validated against your actual database migrations.</div>
+        </div>
+        <div class="blueprint-item">
+          <div class="blueprint-item-title">Zero Runtime Overhead</div>
+          <div class="blueprint-item-desc">Generated code uses only standard library <code style="font-size:0.8em">database/sql</code>. Zero external runtime dependencies.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Quick Start Section -->
+<section class="section" id="quickstart">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-tag">Quick Start</p>
+      <h2 class="section-title">Get Started in Seconds</h2>
+      <p class="section-desc">
+        Install the CLI, initialize your project, and start building with standard Go.
+      </p>
+    </div>
+
+    <div style="max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem;">
+      <div class="card" style="padding: 1.5rem;">
+        <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem;">1. Install the CLI</h4>
+        <p style="font-size: 0.9rem; color: var(--muted-foreground); margin-bottom: 0.75rem;">Requires Go 1.24+.</p>
+        <pre style="background: var(--code-bg); padding: 0.85rem 1rem; border-radius: var(--radius); border: 1px solid var(--border); font-family: var(--font-mono); font-size: 0.875rem;"><code>go install github.com/gofs-cli/gofs@latest</code></pre>
+      </div>
+
+      <div class="card" style="padding: 1.5rem;">
+        <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem;">2. Initialize your project</h4>
+        <p style="font-size: 0.9rem; color: var(--muted-foreground); margin-bottom: 0.75rem;">Provide your Go module path.</p>
+        <pre style="background: var(--code-bg); padding: 0.85rem 1rem; border-radius: var(--radius); border: 1px solid var(--border); font-family: var(--font-mono); font-size: 0.875rem;"><code>gofs init github.com/myorg/myapp</code></pre>
+      </div>
+
+      <div class="card" style="padding: 1.5rem;">
+        <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem;">3. Run with Make</h4>
+        <p style="font-size: 0.9rem; color: var(--muted-foreground); margin-bottom: 0.75rem;">The generated project includes a simple Makefile for development.</p>
+        <pre style="background: var(--code-bg); padding: 0.85rem 1rem; border-radius: var(--radius); border: 1px solid var(--border); font-family: var(--font-mono); font-size: 0.875rem;"><code>cd myapp && make</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Latest from the Blog Section -->
+<section class="section" id="blog">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-tag">Blog & Essays</p>
+      <h2 class="section-title">Deep Dives & Philosophy</h2>
+      <p class="section-desc">
+        Explore our essays on evergreen software engineering, standards over frameworks, and supply chain resilience.
+      </p>
+    </div>
+
+    <div class="cards-grid">
+      {{ range first 3 (where site.RegularPages "Section" "blog") }}
+      <a href="{{ .RelPermalink }}" class="card" style="text-decoration: none;">
+        <div class="post-meta">
+          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+          <span>•</span>
+          <span>{{ .ReadingTime }} min read</span>
+        </div>
+        <h3 class="card-title" style="margin-top: 0.5rem;">{{ .Title }}</h3>
+        <p class="card-desc">{{ .Summary | plainify | truncate 130 }}</p>
+        <div class="post-tags" style="margin-top: auto; padding-top: 1rem;">
+          {{ range .Params.tags }}
+          <span class="post-tag">{{ . }}</span>
+          {{ end }}
+        </div>
+      </a>
+      {{ end }}
+    </div>
+
+    <div style="text-align: center; margin-top: 3rem;">
+      <a href="/blog/" class="btn btn-outline">View All Articles →</a>
+    </div>
+  </div>
+</section>
+{{ end }}

@@ -1,0 +1,45 @@
+{{ define "main" }}
+<div class="prose-container" style="padding-top: 4rem; padding-bottom: 6rem;">
+  <article class="prose">
+    <header style="margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border);">
+      <a href="/blog/" style="font-size: 0.875rem; color: var(--muted-foreground); text-decoration: none; display: inline-flex; align-items: center; gap: 0.25rem; margin-bottom: 1rem;">
+        ← Back to all posts
+      </a>
+      <h1 style="margin-bottom: 0.75rem;">{{ .Title }}</h1>
+      <div class="post-meta" style="margin-bottom: 1rem;">
+        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+        <span>•</span>
+        <span>{{ .ReadingTime }} min read</span>
+        {{ with .Params.authors }}
+        <span>•</span>
+        <span>By {{ delimit . ", " }}</span>
+        {{ end }}
+      </div>
+      <div class="post-tags">
+        {{ range .Params.tags }}
+        <span class="post-tag">{{ . }}</span>
+        {{ end }}
+      </div>
+    </header>
+
+    <div class="article-content">
+      {{ .Content }}
+    </div>
+
+    <footer style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 0.9375rem;">
+      {{ with .PrevInSection }}
+      <a href="{{ .RelPermalink }}" style="color: var(--foreground); text-decoration: none;">
+        <span style="color: var(--muted-foreground); display: block; font-size: 0.8125rem;">← Previous</span>
+        {{ .Title }}
+      </a>
+      {{ end }}
+      {{ with .NextInSection }}
+      <a href="{{ .RelPermalink }}" style="color: var(--foreground); text-decoration: none; text-align: right; margin-left: auto;">
+        <span style="color: var(--muted-foreground); display: block; font-size: 0.8125rem;">Next →</span>
+        {{ .Title }}
+      </a>
+      {{ end }}
+    </footer>
+  </article>
+</div>
+{{ end }}

@@ -1,0 +1,38 @@
+{{ define "main" }}
+<div class="prose-container" style="padding-top: 4rem; padding-bottom: 6rem;">
+  <div style="margin-bottom: 3.5rem;">
+    <h1 style="font-size: 2.5rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.75rem;">Blog & Essays</h1>
+    <p style="font-size: 1.125rem; color: var(--muted-foreground);">
+      Architectural decisions, web standards, and lessons from building evergreen software with Go.
+    </p>
+  </div>
+
+  <div class="post-feed">
+    {{ range .Pages }}
+    <article class="post-card">
+      <div class="post-meta">
+        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+        <span>•</span>
+        <span>{{ .ReadingTime }} min read</span>
+        {{ with .Params.authors }}
+        <span>•</span>
+        <span>By {{ delimit . ", " }}</span>
+        {{ end }}
+      </div>
+
+      <h2 class="post-title">
+        <a href="{{ .RelPermalink }}" style="color: inherit; text-decoration: none;">{{ .Title }}</a>
+      </h2>
+
+      <p class="post-summary">{{ .Summary | plainify | truncate 180 }}</p>
+
+      <div class="post-tags">
+        {{ range .Params.tags }}
+        <span class="post-tag">{{ . }}</span>
+        {{ end }}
+      </div>
+    </article>
+    {{ end }}
+  </div>
+</div>
+{{ end }}
