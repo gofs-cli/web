@@ -151,8 +151,7 @@ When adding a new doc page, ensure it is linked in the sticky documentation side
 │   ├── CNAME               # Custom domain config (gofs.dev)
 │   └── .nojekyll           # Tells GitHub Pages not to invoke Jekyll
 ├── hugo.toml               # Hugo configuration (baseURL, menus, params)
-├── AGENTS.md               # Agent instructions (this file)
-└── CLAUDE.md               # Pointer to AGENTS.md for compatibility
+└── AGENTS.md               # Agent instructions (this file)
 ```
 
 ---
