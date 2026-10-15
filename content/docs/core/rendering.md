@@ -3,8 +3,6 @@ title: "Pages, Islands & Declarative Shadow DOM"
 weight: 3
 ---
 
-# Pages, Islands & Declarative Shadow DOM
-
 Gofs applications are multi-page applications (MPAs). Every route returns a complete, standards-compliant HTML page rendered on the server with Go's standard [`html/template`](https://pkg.go.dev/html/template). Dynamic interactivity is added to pages through **islands**: small, standards-based web components placed into server-rendered HTML that activate once their lightweight JavaScript loads.
 
 The Go server owns the document structure, data fetching, and security boundaries. Web components own their local interactivity. Because neither layer oversteps its responsibilities, there is no client-side router, no global client state store, and no heavyweight frontend framework attempting to manage the entire document.

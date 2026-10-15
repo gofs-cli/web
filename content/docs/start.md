@@ -3,8 +3,6 @@ title: "Quick Start"
 sidebar_position: 3
 ---
 
-# Quick Start
-
 ## 1. Install the gofs cli
 
 > **Info:** You need Go 1.24 or greater. If you don't have Go installed, see [Prerequisites](./prerequisites/required).

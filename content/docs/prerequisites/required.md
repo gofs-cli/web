@@ -3,8 +3,6 @@ title: "Required Tools"
 weight: 1
 ---
 
-# Required Tools
-
 To build applications with gofs, you need only standard tools. Gofs avoids the complex dependencies and build chains common in modern full-stack development.
 
 These docs assume you have basic familiarity with Go. If you are new to Go, the official [Getting Started Tutorial](https://go.dev/doc/tutorial/getting-started) and the [Tour of Go](https://tour.golang.org/welcome/1) provide great starting points.

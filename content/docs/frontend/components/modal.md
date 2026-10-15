@@ -3,8 +3,6 @@ title: "Modal"
 weight: 4
 ---
 
-# Modal
-
 A modal does not need a component. The browser's [`<dialog>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog) element handles opening, closing, focus, the Escape key and the backdrop.
 
 ## Confirmation

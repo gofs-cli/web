@@ -3,8 +3,6 @@ title: "Minimizing Indirection"
 weight: 2
 ---
 
-# Minimizing Indirection
-
 In web development, unnecessary indirection is one of the most common sources of code bloat, slow rendering, and maintenance headaches. 
 
 In a gofs application, we keep indirection to a strict minimum: **prefer direct, readable HTML and CSS over layers of wrapper abstractions.**

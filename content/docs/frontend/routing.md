@@ -3,8 +3,6 @@ title: "Routing"
 weight: 4
 ---
 
-# Routing
-
 ## routes.go
 
 Keep routing for the app in `/internal/server/routes.go`. This makes it easy to manage all routing from one place.

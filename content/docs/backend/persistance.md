@@ -3,8 +3,6 @@ title: "Persisting Data"
 weight: 2
 ---
 
-# Persisting Data
-
 Postgres driver is not included as a dependency since not all apps require a database. Start by getting the Postgres driver.
 
 ```bash

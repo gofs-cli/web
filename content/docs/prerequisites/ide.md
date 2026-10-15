@@ -3,8 +3,6 @@ title: "IDE (optional)"
 weight: 4
 ---
 
-# IDE (optional)
-
 Gofs comes with a language server compliant with
 [Language Server Protocol](https://microsoft.github.io/language-server-protocol/).
 

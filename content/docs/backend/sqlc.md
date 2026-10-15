@@ -3,8 +3,6 @@ title: "Database Access with sqlc"
 weight: 3
 ---
 
-# Database Access with sqlc
-
 Gofs applications query databases with plain, standard SQL. [sqlc](https://sqlc.dev) reads your database schema and your raw SQL queries, checks the queries against the schema for syntax and type errors at compile time, and generates idiomatic, type-safe Go functions for each query.
 
 You write SQL; sqlc writes the boilerplate.

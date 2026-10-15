@@ -3,8 +3,6 @@ title: "Loading Data"
 weight: 3
 ---
 
-# Loading Data
-
 Components talk to the server with `fetch`. Lit's [Task](https://lit.dev/docs/data/task/) controller wraps a fetch in the three states every request has (pending, complete, error), re-runs it when its inputs change, discards the result of a request that has been superseded, and gives you an `AbortSignal` to cancel it. It is the only data library a gofs app has.
 
 ## Fetching on load

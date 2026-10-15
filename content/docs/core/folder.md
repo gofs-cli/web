@@ -3,8 +3,6 @@ title: "Folder structure"
 weight: 1
 ---
 
-# Folder structure
-
 Go is not opinionated about folder structure however go convention (and good practice) states that code should be kept close to where it is used. The gofs template uses the folder structure below.
 
 ```

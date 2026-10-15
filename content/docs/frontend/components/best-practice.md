@@ -3,8 +3,6 @@ title: "Best Practice"
 weight: 1
 ---
 
-# Best Practice
-
 Building frontend features in gofs follows a simple philosophy: **leverage web standards, keep dependencies close to zero, and let the server do what the server does best.**
 
 ---

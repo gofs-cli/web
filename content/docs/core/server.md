@@ -3,8 +3,6 @@ title: "Http server"
 weight: 2
 ---
 
-# Http server
-
 Gofs apps use the go [net/http](https://pkg.go.dev/net/http) server. The server implementation is found in `/internal/server`.
 
 ```
