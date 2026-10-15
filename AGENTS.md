@@ -128,7 +128,8 @@ When adding a new doc page, ensure it is linked in the sticky documentation side
 ├── content/
 │   ├── _index.md           # Homepage metadata & copy
 │   ├── blog/               # Markdown blog posts
-│   └── docs/               # Documentation sections
+│   ├── docs/               # Documentation sections
+│   └── slides/             # Reveal.js markdown slide decks
 ├── layouts/
 │   ├── _default/
 │   │   ├── baseof.html     # HTML5 shell (nav, footer, head)
@@ -140,6 +141,11 @@ When adding a new doc page, ensure it is linked in the sticky documentation side
 │   ├── docs/
 │   │   ├── list.html       # Docs category view
 │   │   └── single.html     # Docs article view with sidebar
+│   ├── slides/
+│   │   ├── list.html       # /slides/ presentations index
+│   │   └── single.html     # /slides/<slug>/ Reveal.js standalone template
+│   ├── shortcodes/
+│   │   └── reveal.html     # {{< reveal src="..." >}} embed shortcode
 │   ├── partials/
 │   │   ├── head.html       # <head> meta, snice theme CSS, web components CDN
 │   │   ├── header.html     # Main navbar
@@ -156,7 +162,42 @@ When adding a new doc page, ensure it is linked in the sticky documentation side
 
 ---
 
-## 6. Design System & Web Components
+## 6. How to Add a Slide Deck
+
+Slide presentations are built using **Reveal.js** loaded via CDN (zero npm dependencies).
+
+### Creating a Deck
+Add a markdown file in `content/slides/<slug>.md`:
+```markdown
+---
+title: "My Presentation"
+layout: "slides"
+outputs: ["HTML"]
+---
+
+# Slide 1
+Opening slide content
+
+---
+
+## Slide 2
+Horizontal transition
+
+--
+
+### Deep Dive
+Vertical transition
+```
+
+### Embedding in Pages
+Use the `reveal` shortcode:
+```html
+{{</* reveal src="/slides/my-slug/" title="My Talk" */>}}
+```
+
+---
+
+## 7. Design System & Web Components
 
 The website integrates the **snice.dev** component suite via CDN in `layouts/partials/head.html`:
 * Theme CSS: `https://snice.dev/theme/theme.css`
@@ -172,7 +213,7 @@ All styles in `assets/css/style.css` consume snice design tokens (e.g., `var(--s
 
 ---
 
-## 7. Deployment & GitHub Actions
+## 8. Deployment & GitHub Actions
 
 * Static hosting: **GitHub Pages** with custom domain `https://gofs.dev`.
 * GitHub Pages source in repository settings must be set to **GitHub Actions** (not "Deploy from a branch").
