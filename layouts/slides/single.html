@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>{{ .Title }} — {{ site.Title }}</title>
+  
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="/img/favicon.svg">
+
+  <!-- Reveal.js Base CSS & Default Theme -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/theme/black.css" id="theme">
+
+  <!-- Code Syntax Highlighting Theme -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/highlight/monokai.css">
+
+  <style>
+    .reveal pre {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+    .reveal kbd {
+      background: #333;
+      border: 1px solid #555;
+      border-radius: 4px;
+      padding: 0.1em 0.4em;
+      font-size: 0.85em;
+    }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section data-markdown data-separator="^---" data-separator-vertical="^--">
+        <textarea data-template>
+{{ .RawContent | safeHTML }}
+        </textarea>
+      </section>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/markdown/markdown.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/highlight/highlight.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/notes/notes.js"></script>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const isEmbedded = urlParams.get('embedded') === 'true';
+
+    Reveal.initialize({
+      hash: !isEmbedded,
+      history: !isEmbedded,
+      embedded: isEmbedded,
+      slideNumber: 'c/t',
+      controls: true,
+      progress: true,
+      center: true,
+      plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+    });
+  </script>
+</body>
+</html>
