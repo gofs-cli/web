@@ -3,7 +3,7 @@ title: "Overview & Philosophy"
 sidebar_position: 1
 ---
 
-**Gofs** (Go Full Stack) is a lightweight architectural template and CLI for building evergreen web applications. The server is written in Go using only the standard library. Pages are rendered on the server with Go's `html/template`. Interactivity is delivered through small, standards-based web components written with [Lit](https://lit.dev). Data lives in PostgreSQL and is queried with plain SQL through [sqlc](https://sqlc.dev).
+**Gofs** (Go Full Stack) is a lightweight architectural template and CLI for building evergreen web applications. The server is written in Go using only the standard library. Pages are rendered on the server with Go's `html/template`. Interactivity is delivered through standards-based **Web Components** (Custom Elements and Declarative Shadow DOM). Developers can author components using pure native browser APIs or lightweight micro-libraries rooted in web components, without proprietary framework lock-in. Data lives in PostgreSQL and is queried with plain SQL through [sqlc](https://sqlc.dev).
 
 Gofs is designed around a single guiding premise: **minimize runtime dependencies and build on stable, backward-compatible standards.** It leverages Go's backward compatibility promise on the server and the web platform's permanence in the browser to deliver applications that remain maintainable for decades without relentless upgrade churn.
 
@@ -27,8 +27,8 @@ While that initial stack proved that server-driven web apps could replace comple
 2. **Web Components & Declarative Shadow DOM (DSD)**:
    Browser standards evolved significantly. Custom Elements are universally supported in every browser engine without polyfills. Crucially, **Declarative Shadow DOM (`<template shadowrootmode="open">`)** is now Baseline Widely Available across all major browsers. DSD allows the Go server to output encapsulated shadow roots directly in server-rendered HTML. Components gain true style and DOM encapsulation with zero client-side JavaScript execution required for initial render and zero layout shift.
 
-3. **Lit as a Standards-Based Micro-Library**:
-   Rather than attempting to force "Go everywhere" or stretching HTML attributes into an ad-hoc client application, modern web standards provide custom elements. [Lit](https://lit.dev) provides a featherweight (~5 KB) reactive layer on top of native Custom Elements, adding reactive properties and tagged template literals (`html`\``...`\``). Lit requires no bundler, no compile step, and zero proprietary framework runtime. It vendors as a single file, serves directly from the Go binary, and natively hydrates Declarative Shadow DOM rendered by Go templates.
+3. **Web Standards Over Framework Lock-In**:
+   Rather than attempting to force "Go everywhere" or stretching HTML attributes into an ad-hoc client application, modern web standards provide native **Custom Elements**. Because Custom Elements are a native W3C browser standard, they provide universal interoperability. You are never locked into an ephemeral framework ecosystem. Developers can write pure vanilla custom elements using native browser APIs, or choose minimal authoring libraries rooted strictly in web components (such as Lit or FAST). These tools are not monolithic applications that take over your page—they are merely thin ergonomic helpers around standard Custom Elements, requiring no bundlers, compiling to standard ES modules, serving directly from the Go binary, and natively hydrating Declarative Shadow DOM rendered by standard Go templates.
 
 4. **AI Eliminates the "Cumbersome HTML" Penalty**:
    Historically, developers justified complex template DSLs (such as `templ` or JSX) or heavy framework abstractions because hand-authoring raw HTML, repetitive form structures, and Go's `html/template` blocks felt verbose and cumbersome. 
@@ -41,24 +41,20 @@ While that initial stack proved that server-driven web apps could replace comple
 
 In modern software engineering, adding a dependency is often treated as "free functionality." In reality, every external runtime dependency is an ongoing liability.
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                   The Dependency Tax                        │
-│                                                             │
-│  [ New Dependency ] ──► [ Transitive Tree Explodes ]        │
-│                               │                             │
-│                               ▼                             │
-│                     [ Security Advisories ]                 │
-│                               │                             │
-│                               ▼                             │
-│                      [ Breaking Changes ]                   │
-│                               │                             │
-│                               ▼                             │
-│                    [ Costly Upgrade Cycles ]                │
-│                               │                             │
-│                               ▼                             │
-│              80% Time Spent "Standing Still"                │
-└─────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    A["New Dependency Added"] --> B["Transitive Tree Explodes<br/>(Hundreds of Packages)"]
+    B --> C["Continuous Security Advisories & CVEs"]
+    C --> D["Upstream Breaking Changes & Deprecations"]
+    D --> E["Costly Migration & Rewrite Cycles"]
+    E --> F["80% Engineering Time Spent 'Standing Still'"]
+
+    style A fill:#1e293b,stroke:#3b82f6,stroke-width:2px,color:#f8fafc
+    style B fill:#1e293b,stroke:#eab308,stroke-width:1px,color:#f8fafc
+    style C fill:#1e293b,stroke:#f97316,stroke-width:1px,color:#f8fafc
+    style D fill:#1e293b,stroke:#ef4444,stroke-width:1px,color:#f8fafc
+    style E fill:#1e293b,stroke:#dc2626,stroke-width:2px,color:#f8fafc
+    style F fill:#450a0a,stroke:#ef4444,stroke-width:2px,color:#fca5a5
 ```
 
 ### The Upgrade Treadmill & "Standing Still" Costs
@@ -82,7 +78,7 @@ A typical single-page application using npm frequently pulls in **thousands of t
 Gofs combats this at the architectural root:
 - **No Node.js, npm, or Bundlers**: A gofs project contains no `package.json` and no `node_modules`.
 - **Zero Runtime Dependencies**: The Go backend depends only on Go's standard library. Even the database layer (`sqlc`) produces plain `database/sql` code with zero third-party runtime dependencies.
-- **Vendored, Checksummed Client Assets**: The only browser libraries used (Lit and its Task controller) are vendored as single static files, pinned, and checksummed in `.gofs/vendor.json`, served directly from the embedded Go binary with immutable cache headers.
+- **Vendored, Checksummed Client Assets**: Any client-side scripts or web component helpers are vendored as standalone, pinned, and checksummed static files in `.gofs/vendor.json` and served directly from the embedded Go binary with immutable cache headers—bypassing npm entirely.
 
 Eliminating third-party runtime dependencies shrinks the software attack surface to near zero.
 
@@ -107,17 +103,33 @@ Gofs grounds its frontend architecture directly in web standards:
 - **Modern CSS Baseline**: Modern CSS provides nesting, cascade layers, CSS custom properties (variables), and container queries natively. There is no need for CSS preprocessors, PostCSS, or bundler configurations.
 - **Baseline Policy**: Gofs adheres to the [Web Baseline](https://web.dev/baseline) standard. *Widely available* features are used freely, *Newly available* features include graceful fallbacks, and *Limited availability* features require explicit justification.
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                 The Gofs Evergreen Stack                    │
-│                                                             │
-│   SERVER: Go Standard Library (Go 1 Compatibility Promise)  │
-│   DATABASE: sqlc (Plain SQL ──► database/sql, 0 Runtime)    │
-│   TEMPLATES: html/template + Declarative Shadow DOM (DSD)   │
-│   FRONTEND: Web Components (Custom Elements) + Lit (~5 KB)  │
-│   STYLING: Modern Baseline CSS (Nesting, Variables, Layers) │
-│   TOOLING: AI-Assisted, Zero Build Step, Zero npm           │
-└─────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph STACK["The Gofs Evergreen Architecture"]
+        direction TB
+        S["<b>SERVER</b><br/>Go Standard Library (Go 1 Compatibility Promise)"]
+        D["<b>DATABASE</b><br/>sqlc (Plain SQL ➔ database/sql, Zero Runtime)"]
+        T["<b>TEMPLATES & SSR</b><br/>html/template + Declarative Shadow DOM (DSD)"]
+        F["<b>FRONTEND & INTERACTIVITY</b><br/>Web Components (W3C Custom Elements, Framework-Agnostic)"]
+        C["<b>STYLING</b><br/>Modern Baseline CSS (Variables, Nesting, Scoped Styles)"]
+        A["<b>TOOLING & VELOCITY</b><br/>AI Coding Assistants + Zero Build Step + Zero npm"]
+    end
+
+    S --> T
+    D --> S
+    T --> F
+    F --> C
+    A -. Accelerates .-> S
+    A -. Accelerates .-> T
+    A -. Accelerates .-> F
+
+    style STACK fill:#0f172a,stroke:#334155,stroke-width:2px,color:#94a3b8
+    style S fill:#1e293b,stroke:#0ea5e9,stroke-width:2px,color:#f8fafc
+    style D fill:#1e293b,stroke:#10b981,stroke-width:2px,color:#f8fafc
+    style T fill:#1e293b,stroke:#8b5cf6,stroke-width:2px,color:#f8fafc
+    style F fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
+    style C fill:#1e293b,stroke:#ec4899,stroke-width:2px,color:#f8fafc
+    style A fill:#1e293b,stroke:#64748b,stroke-width:2px,color:#f8fafc
 ```
 
 ---

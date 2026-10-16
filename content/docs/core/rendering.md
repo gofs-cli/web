@@ -82,19 +82,37 @@ Modern AI coding assistants completely neutralize this friction. AI assistants e
 
 Gofs supports two complementary patterns for building web component islands: **Light DOM Islands** and **Declarative Shadow DOM (DSD) Islands**.
 
-```
-┌────────────────────────────────────────────────────────────────────────┐
-│                        Island Architecture                             │
-│                                                                        │
-│   ┌────────────────────────────────┐  ┌─────────────────────────────┐  │
-│   │        Light DOM Island        │  │ Declarative Shadow DOM (DSD)│  │
-│   ├────────────────────────────────┤  ├─────────────────────────────┤  │
-│   │ • Inherits global app.css      │  │ • Strict style encapsulation│  │
-│   │ • Direct access to DOM childs  │  │ • Native SSR with <template>│  │
-│   │ • Ideal for forms, buttons,    │  │ • Reusable widgets, slots   │  │
-│   │   and in-page interactions     │  │ • Zero layout shift / FOUC  │  │
-│   └────────────────────────────────┘  └─────────────────────────────┘  │
-└────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart LR
+    subgraph ISLANDS["Island Architecture: Two Complementary Patterns"]
+        direction LR
+        subgraph LIGHT["Light DOM Island"]
+            direction TB
+            L1["• Inherits global app.css"]
+            L2["• Direct access to DOM children"]
+            L3["• Ideal for forms & in-page interactions"]
+            L4["• Zero JS required for progressive enhancement"]
+        end
+        subgraph DSD["Declarative Shadow DOM (DSD)"]
+            direction TB
+            D1["• Strict style & DOM encapsulation"]
+            D2["• Native SSR with &lt;template shadowrootmode&gt;"]
+            D3["• Reusable component widgets & &lt;slot&gt; projection"]
+            D4["• Zero layout shift (CLS) & zero FOUC"]
+        end
+    end
+
+    style ISLANDS fill:#0f172a,stroke:#334155,stroke-width:2px,color:#94a3b8
+    style LIGHT fill:#1e293b,stroke:#3b82f6,stroke-width:2px,color:#f8fafc
+    style DSD fill:#1e293b,stroke:#8b5cf6,stroke-width:2px,color:#f8fafc
+    style L1 fill:#0f172a,stroke:none,color:#cbd5e1
+    style L2 fill:#0f172a,stroke:none,color:#cbd5e1
+    style L3 fill:#0f172a,stroke:none,color:#cbd5e1
+    style L4 fill:#0f172a,stroke:none,color:#cbd5e1
+    style D1 fill:#0f172a,stroke:none,color:#cbd5e1
+    style D2 fill:#0f172a,stroke:none,color:#cbd5e1
+    style D3 fill:#0f172a,stroke:none,color:#cbd5e1
+    style D4 fill:#0f172a,stroke:none,color:#cbd5e1
 ```
 
 ### 1. Light DOM Islands (Default)
@@ -115,7 +133,7 @@ In a Light DOM island, the server renders standard HTML directly inside the cust
 </todo-list>
 ```
 
-In the component JavaScript, we tell Lit to render into the light DOM rather than creating a shadow root:
+In component JavaScript (here illustrated using Lit as a lightweight custom element helper), we can render directly into the light DOM rather than creating a shadow root:
 
 ```js
 export class TodoList extends LitElement {
@@ -167,7 +185,7 @@ DSD is a native browser standard (Baseline Widely Available) that allows the ser
 #### Why DSD is a Major Leap Forward:
 - **Instant Paint Without JavaScript**: Browsers immediately render the encapsulated shadow DOM while streaming the HTML, eliminating the Flash of Unstyled Content (FOUC) and Cumulative Layout Shift (CLS) historically associated with client-rendered web components.
 - **True Server-Side Rendering (SSR)**: The Go server renders the entire component UI, while CSS scoping remains 100% enforced by the browser engine.
-- **Native Lit Hydration**: When Lit loads on the client, it automatically discovers the existing shadow root rendered by DSD, seamlessly adopting the server-rendered DOM tree without recreating elements or flashing.
+- **Native Web Component Hydration**: When client component scripts load, custom element classes (such as Lit or vanilla custom elements) automatically discover the existing shadow root rendered by DSD, seamlessly adopting the server-rendered DOM tree without recreating elements or flashing.
 
 ---
 

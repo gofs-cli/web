@@ -42,7 +42,7 @@ gofs init github.com/myorg/myapp myfolder
 go tool gofs init github.com/myorg/myapp
 ```
 
-The generated project is a complete, runnable app. It contains a Go server, a page layout, a vendored copy of Lit, an example component, and a `sqlc.yaml` ready for your first package. There is no `package.json` and nothing to `npm install`.
+The generated project is a complete, runnable app. It contains a Go server, a page layout, vendored web component helpers, an example component, and a `sqlc.yaml` ready for your first package. There is no `package.json` and nothing to `npm install`.
 
 ## 3. Run the project
 
