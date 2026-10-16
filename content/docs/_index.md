@@ -5,35 +5,33 @@ sidebar_position: 1
 
 **Gofs** (Go Full Stack) is a lightweight architectural template and CLI for building evergreen web applications. The server is written in Go using only the standard library. Pages are rendered on the server with Go's `html/template`. Interactivity is delivered through standards-based **Web Components** (Custom Elements and Declarative Shadow DOM). Developers can author components using pure native browser APIs or lightweight micro-libraries rooted in web components, without proprietary framework lock-in. Data lives in PostgreSQL and is queried with plain SQL through [sqlc](https://sqlc.dev).
 
-Gofs is designed around a single guiding premise: **minimize runtime dependencies and build on stable, backward-compatible standards.** It leverages Go's backward compatibility promise on the server and the web platform's permanence in the browser to deliver applications that remain maintainable for decades without relentless upgrade churn.
+Gofs is designed around a single guiding premise: **minimize runtime dependencies and build on stable, backward-compatible standards.** It leverages Go's backward compatibility promise on the server and the web platform's permanence in the browser to deliver applications that remain maintainable for the forseeable future without relentless upgrade churn.
 
 ---
 
-## The Evolution of Gofs
+## The Development of Gofs
 
 ### The Original Vision: Escaping Heavy JS Frameworks
 
-Gofs originally set out to solve a pervasive problem in modern software engineering: the suffocating complexity of heavy single-page application (SPA) JavaScript frameworks (React, Angular, Vue, Next.js). The original stack combined **Go**, **templ**, **htmx**, and **Tailwind**.
+Gofs originally set out to solve a pervasive problem in modern software engineering: the complexity of heavy single-page application (SPA) JavaScript frameworks (React, Angular, Vue, Next.js). The original stack combined **Go**, **templ**, **htmx**, and **Tailwind**.
 
-The goal was noble: run a Go backend, generate HTML via templ, add dynamic behavior using htmx, and style with utility CSS, freeing developers from managing massive client-side state stores, client routers, and heavy npm build pipelines.
+The goal was: run a Go backend, generate HTML via templ, add dynamic behavior using htmx, and style with utility CSS, freeing developers from managing massive client-side state stores, client routers, and heavy npm build pipelines.
 
-### What Changed: The Modern Landscape
+### Modern web standards
 
-While that initial stack proved that server-driven web apps could replace complex SPAs, real-world experience and rapid shifts in the technology landscape revealed new opportunities to eliminate even more friction and fragility:
+While that initial stack proved that server-driven web apps could replace most SPAs, technology continued to develop around standards and more browser-native capabilities, enabling even leaner, more maintainable architectures. Supply chain attacks caused the tech world to focus on what is run in production and the importance of minimizing runtime dependencies.
 
 1. **`sqlc` Bundles Zero Runtime Dependencies**:
-   Traditional ORMs (and custom struct-based CRUD generators) introduce heavy runtime abstractions, reflection overhead, and proprietary query DSLs that inevitably break over time. `sqlc` changed the game by compiling raw, standard SQL into type-safe Go code that depends solely on the Go standard library's `database/sql`. It is a development tool, not a runtime dependency.
+   Traditional ORMs (and custom struct-based CRUD generators) introduce heavy runtime abstractions, reflection overhead, and proprietary query DSLs that inevitably change over time. `sqlc` works by compiling raw, standard SQL into type-safe Go code that depends solely on the Go standard library's `database/sql`. It is a development tool, not a runtime dependency.
 
 2. **Web Components & Declarative Shadow DOM (DSD)**:
    Browser standards evolved significantly. Custom Elements are universally supported in every browser engine without polyfills. Crucially, **Declarative Shadow DOM (`<template shadowrootmode="open">`)** is now Baseline Widely Available across all major browsers. DSD allows the Go server to output encapsulated shadow roots directly in server-rendered HTML. Components gain true style and DOM encapsulation with zero client-side JavaScript execution required for initial render and zero layout shift.
 
-3. **Web Standards Over Framework Lock-In**:
-   Rather than attempting to force "Go everywhere" or stretching HTML attributes into an ad-hoc client application, modern web standards provide native **Custom Elements**. Because Custom Elements are a native W3C browser standard, they provide universal interoperability. You are never locked into an ephemeral framework ecosystem. Developers can write pure vanilla custom elements using native browser APIs, or choose minimal authoring libraries rooted strictly in web components (such as Lit or FAST). These tools are not monolithic applications that take over your page—they are merely thin ergonomic helpers around standard Custom Elements, requiring no bundlers, compiling to standard ES modules, serving directly from the Go binary, and natively hydrating Declarative Shadow DOM rendered by standard Go templates.
+3. **Web Standards Over Frameworks**:
+   Rather than attempting to force "Go everywhere" or stretching HTML attributes into an ad-hoc client application, modern web standards provide native **Custom Elements**. Because Custom Elements are a native W3C browser standard, they provide universal interoperability. You are never locked into an ephemeral framework ecosystem. Developers can write pure vanilla custom elements using native browser APIs.
 
-4. **AI Eliminates the "Cumbersome HTML" Penalty**:
-   Historically, developers justified complex template DSLs (such as `templ` or JSX) or heavy framework abstractions because hand-authoring raw HTML, repetitive form structures, and Go's `html/template` blocks felt verbose and cumbersome. 
-
-   Today, **AI coding assistants have completely inverted this dynamic**. AI excels at generating, refactoring, and verifying standard HTML, modern CSS, SQL, and standard Go templates because web standards and the Go standard library have vast, consistent, stable documentation spanning decades. You no longer need to adopt a bespoke template compiler or a complex framework just to save keystrokes: AI writes the standard boilerplate, and your codebase remains clean, transparent, and dependency-free.
+4. **AI has gotten very good at HTML**:
+   Golang templates have been around since the first days of Go, over a decade ago. However lack of tooling and cumbersome developer experiences have been a barrier when smooth experiences with JSX were the norm. Today even smaller LLMs can capably write the HTML with near 100% accuracy. As this is largely logic free code, the risk is minimal and it saves a developer a lot of time. HTML is also easier to review than heavy logic code, making it more maintainable in the long run.
 
 ---
 
@@ -57,11 +55,11 @@ flowchart TD
     style F fill:#450a0a,stroke:#ef4444,stroke-width:2px,color:#fca5a5
 ```
 
-### The Upgrade Treadmill & "Standing Still" Costs
+### The cost of constant upgrade cycles
 
-When an application relies on heavy third-party frameworks and deep dependency trees, engineering teams quickly find themselves trapped on an upgrade treadmill. Minor and major updates regularly introduce breaking changes, deprecate APIs, or shift underlying paradigms (e.g., Python 2 to 3, .NET Framework to Core, AngularJS to Angular 2+, React Class Components to Hooks to Server Components).
+When an application relies on heavy third-party frameworks and deep dependency trees, engineering teams quickly find themselves trapped in a cycle of constant upgrades, that only grows with the number and scale of apps. Minor and major updates regularly introduce breaking changes, deprecate APIs, or shift underlying paradigms (e.g., Python 2 to 3, .NET Framework to Core, AngularJS to Angular 2+, React Class Components to Hooks to Server Components).
 
-Organizations frequently spend **60% to 80% of their engineering capacity simply "standing still"**—resolving dependency conflicts, patching deprecations, updating bundlers, and fixing broken builds—leaving only a fraction of their budget for delivering actual business value. When budgets tighten and upgrades are deferred, technical debt compounds until systems become unmaintainable legacy anchors.
+Organizations frequently spend **60% to 80% of their engineering capacity simply "standing still"** resolving dependency conflicts, patching deprecations, updating bundlers, and fixing broken builds—leaving only a fraction of their budget for delivering actual business value. When budgets tighten and upgrades are deferred, technical debt compounds until systems become unmaintainable legacy anchors.
 
 ### Breaking Changes & Ecosystem Volatility
 
@@ -69,22 +67,23 @@ Open-source libraries evolve, pivot, or get abandoned. A framework maintainer ma
 
 By contrast, code written against rock-solid standards does not suffer from ecosystem volatility. A Go standard library HTTP handler or a standard HTML `<form>` written ten years ago works just as reliably today, without modification.
 
-### Supply Chain Attacks: The Deep Dependency Danger
+### Supply Chain Attacks
 
 The modern software supply chain has become a primary attack vector. Incidents involving typosquatting, compromised maintainer credentials, malicious post-install scripts, protestware, and dependency confusion exploit ecosystems with deep, uncontrolled dependency graphs.
 
 A typical single-page application using npm frequently pulls in **thousands of transitive packages** (`node_modules`) written by thousands of anonymous contributors. Every single package in that chain runs code with full developer or runtime permissions.
 
 Gofs combats this at the architectural root:
-- **No Node.js, npm, or Bundlers**: A gofs project contains no `package.json` and no `node_modules`.
-- **Zero Runtime Dependencies**: The Go backend depends only on Go's standard library. Even the database layer (`sqlc`) produces plain `database/sql` code with zero third-party runtime dependencies.
-- **Vendored, Checksummed Client Assets**: Any client-side scripts or web component helpers are vendored as standalone, pinned, and checksummed static files in `.gofs/vendor.json` and served directly from the embedded Go binary with immutable cache headers—bypassing npm entirely.
+
+- **Avoiding NPM where practical**: A gofs project minimises or eliminates third-party modules shipped to production.
+- **Zero Runtime Dependencies**: The Go backend depends only on Go's standard library. Even the database layer (`sqlc`) produces plain `database/sql` code with minimal or zero third-party runtime dependencies.
+- **Vendored, Checksummed Client Assets**: Any client-side scripts or web component helpers are vendored as standalone, pinned, and checksummed static files in the project repository and served directly from the embedded Go binary with immutable cache headers—bypassing npm entirely.
 
 Eliminating third-party runtime dependencies shrinks the software attack surface to near zero.
 
 ---
 
-## The Solution: Stable Standards & Backward Compatibility
+## Standards & Backward Compatibility
 
 ### Go's Backward Compatibility Promise
 
@@ -138,10 +137,10 @@ flowchart TD
 
 To maintain a lean codebase without sacrificing developer productivity, gofs strictly distinguishes between **runtime dependencies** and **development tools**:
 
-| Category | Definition | Gofs Policy |
-| :--- | :--- | :--- |
-| **Runtime Dependency** | Code that compiles into your binary or ships to user browsers. | Kept as close to **zero** as possible. Must be small, stable, and built on backward-compatible standards. |
-| **Development Tool** | Tools that run during development or CI to generate code (e.g. `gofs`, `sqlc`). | Allowed under one golden rule: **The output must be plain, readable code that continues working even if the tool disappeared tomorrow.** |
+| Category               | Definition                                                                      | Gofs Policy                                                                                                                              |
+| :--------------------- | :------------------------------------------------------------------------------ | :--------------------------------------------------------------------------------------------------------------------------------------- |
+| **Runtime Dependency** | Code that compiles into your binary or ships to user browsers.                  | Kept as close to **zero** as possible. Must be small, stable, and built on backward-compatible standards.                                |
+| **Development Tool**   | Tools that run during development or CI to generate code (e.g. `gofs`, `sqlc`). | Allowed under one golden rule: **The output must be plain, readable code that continues working even if the tool disappeared tomorrow.** |
 
 Under this rule:
 - **`sqlc` is accepted**: It parses SQL and writes plain Go standard library `database/sql` code. The generated code is committed to your repository. Your app builds and runs without `sqlc` installed.
@@ -176,4 +175,4 @@ Gofs is not another framework; it is an architectural mindset. By rejecting the 
 - **Eliminate costly "standing still" maintenance cycles**
 - **Deliver maximum performance and simplicity for developers and end users alike**
 
-
+While we plan to build a gofs cli, it is meremly a template for a starter project that envisions these principles, not a mandatory build tool or part of the build pipeline.
