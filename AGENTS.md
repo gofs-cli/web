@@ -9,11 +9,11 @@ This file provides instructions and guidelines for AI agents working in this rep
 This repository hosts the official product landing page, documentation, and blog for **gofs** ([https://gofs.dev](https://gofs.dev)).
 
 * **Architecture**: Static site generated using **Hugo** (extended).
-* **Frontend Philosophy**: Evergreen web standards with native Web Components loaded via CDN ([snice.dev](https://snice.dev)).
+* **Frontend Philosophy**: Evergreen web standards with native Web Components vendored locally (`static/vendor/snice/`) from Snice.
 * **Hard Constraints**:
   * **Zero Node.js / zero npm dependencies**: Never introduce `package.json`, `npm`, `npx`, `pnpm`, or JavaScript bundlers.
   * **No template DSLs**: Hugo templates use standard Go `html/template` syntax.
-  * **Dark theme default**: The site uses `data-theme="dark"` with CSS design tokens provided by `snice.dev`.
+  * **Dark theme default**: The site uses `data-theme="dark"` with CSS design tokens provided by Snice.
 
 > **Note on CLI**: The `gofs` CLI itself is maintained in a separate repository (`github.com/gofs-cli/gofs`). This repository is strictly for the website.
 
@@ -198,18 +198,19 @@ Use the `reveal` shortcode:
 ---
 
 ## 7. Design System & Web Components
-
-The website integrates the **snice.dev** component suite via CDN in `layouts/partials/head.html`:
-* Theme CSS: `https://snice.dev/theme/theme.css`
+ 
+The website integrates the **Snice** component suite vendored locally in `static/vendor/snice/` and loaded in `layouts/partials/head.html`:
+* Theme CSS: `/vendor/snice/theme.css`
 * Components loaded:
-  * `<snice-runtime>`
-  * `<snice-badge>`
-  * `<snice-button>`
-  * `<snice-card>`
-  * `<snice-tag>`
-  * `<snice-terminal>`
+  * `<snice-runtime>` (`/vendor/snice/snice-runtime.min.js`)
+  * `<snice-badge>` (`/vendor/snice/snice-badge.min.js`)
+  * `<snice-button>` (`/vendor/snice/snice-button.min.js`)
+  * `<snice-card>` (`/vendor/snice/snice-card.min.js`)
+  * `<snice-tag>` (`/vendor/snice/snice-tag.min.js`)
+  * `<snice-terminal>` (`/vendor/snice/snice-terminal.min.js`)
 
 All styles in `assets/css/style.css` consume snice design tokens (e.g., `var(--snice-color-surface)`, `var(--snice-spacing-md)`, `var(--snice-font-family)`). Maintain consistent dark-theme styling when adding new elements.
+
 
 ---
 
