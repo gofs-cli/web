@@ -6,16 +6,16 @@
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
 <link rel="icon" type="image/svg+xml" href="/img/favicon.svg">
 
-<!-- snice.dev Design System & Theme -->
-<link rel="stylesheet" href="https://snice.dev/theme/theme.css">
+<!-- Snice Design System & Theme (Vendored locally) -->
+<link rel="stylesheet" href="/vendor/snice/theme.css">
 
 {{ $css := resources.Get "css/style.css" | minify | fingerprint }}
 <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
 
-<!-- Web Components (Drop-in CDN, zero build step) -->
-<script src="https://snice.dev/components/snice-runtime.min.js"></script>
-<script async src="https://snice.dev/components/snice-badge.min.js"></script>
-<script async src="https://snice.dev/components/snice-button.min.js"></script>
-<script async src="https://snice.dev/components/snice-card.min.js"></script>
-<script async src="https://snice.dev/components/snice-tag.min.js"></script>
-<script async src="https://snice.dev/components/snice-terminal.min.js"></script>
+<!-- Web Components (Vendored locally, zero CDN runtime dependency) -->
+<script src="/vendor/snice/snice-runtime.min.js"></script>
+<script async src="/vendor/snice/snice-badge.min.js"></script>
+<script async src="/vendor/snice/snice-button.min.js"></script>
+<script async src="/vendor/snice/snice-card.min.js"></script>
+<script async src="/vendor/snice/snice-tag.min.js"></script>
+<script async src="/vendor/snice/snice-terminal.min.js"></script>
